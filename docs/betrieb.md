@@ -37,6 +37,7 @@ Skalierungspfad, falls nötig: Postgres vom App-Host trennen, Synapse-Worker, Ne
 4. Matrix + Element, SSO-Login
 5. Gruppenabgleich für ein Vereinsbeispiel (Wanne-Eickel)
 6. Nextcloud nur für eine Backoffice-Gruppe, Collabora
-7. Belege im Portal
-8. Abgabe und Limits
-9. Track & Trace, dann §-26-Export
+7. Mein Konto: Beitrag, Tokens, Belege
+8. SEPA-Mandat über Zahlungsdienst, monatlicher Worker
+9. Abgabe und Limits
+10. Track & Trace, dann §-26-Export

@@ -15,7 +15,8 @@ Ein Keycloak-Konto für jede Person. Mitglieder arbeiten im Portal, im CAV-Kern 
 | [docs/entscheide.md](docs/entscheide.md) | Festlegungen (cannaUNITY, Nextcloud, ERPNext, Matrix) |
 | [docs/architektur.md](docs/architektur.md) | Hosts, Docker-Compose, Datenflüsse |
 | [docs/sso-matrix.md](docs/sso-matrix.md) | SSO, Keycloak-Gruppen, Matrix-Spaces |
-| [docs/fachkern.md](docs/fachkern.md) | CAV-Kern, Portal, was selbst gebaut wird |
+| [docs/fachkern.md](docs/fachkern.md) | CAV-Kern, Portal, Mein Konto, was selbst gebaut wird |
+| [docs/beitrag-sepa.md](docs/beitrag-sepa.md) | Tokens, Lastschrift, monatlicher Einzug |
 | [docs/betrieb.md](docs/betrieb.md) | Linux, Backup, Skalierung auf viele Konten |
 
 ## Nicht das Ziel

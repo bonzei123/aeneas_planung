@@ -68,7 +68,9 @@ Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes.
 
 Getrennte Datenbanken (oder mindestens getrennte Schemas) für Keycloak, Nextcloud, Synapse und CAV. Eine gemeinsame Postgres-Instanz am Anfang ist zulässig, solange die Daten nicht in einer Datenbank vermischt werden.
 
-CAV spricht **nicht** mit Nextcloud, um Mitglieder-PDFs abzulegen. Vorstandsdateien entstehen in Nextcloud. Mitgliedsbelege erzeugt der CAV-Kern und zeigt sie im Portal.
+CAV spricht **nicht** mit Nextcloud, um Mitglieder-PDFs abzulegen. Vorstandsdateien entstehen in Nextcloud. Mitgliedsbelege erzeugt der CAV-Kern und zeigt sie im Portal unter Mein Konto (Beitrag, Tokens, PDFs).
+
+Der monatliche Bankeinzug läuft nicht über die eigene Bank-API, sondern über einen Zahlungsdienstleister. Der CAV-Worker stößt den Einzug an und nimmt Webhooks entgegen; siehe [beitrag-sepa.md](beitrag-sepa.md).
 
 ## Mandanten
 

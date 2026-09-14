@@ -28,6 +28,17 @@ Der Nextcloud-OIDC-Client in Keycloak ist auf Backoffice-Gruppen beschränkt. Mi
 
 Mitgliederchat ist Matrix + Element, nicht Nextcloud Talk. Spaces bilden Gesamtverein, Bundesland und Ortsverein ab. Abgabe, Limits und Chargen bleiben im CAV-Kern, nicht im Chat.
 
+## Mitgliedsbeitrag und Tokens
+
+Aktuelles Vereinsmodell (änderbar, z. B. nach Reboot):
+
+- Fester Mitgliedsbeitrag **10 €** pro Monat (Lastschrift).
+- Zusätzlich **manuelle Einzahlung** über denselben Zahlungsdienst (Zahlungslink), Betrag frei. Beides wird als **Tokens** gutgeschrieben.
+- Pflege und Übersicht liegen im Portal unter **Mein Konto** (nicht in Nextcloud, nicht in Matrix).
+- Der 10-€-Einzug kommt monatlich vom Dienstleister; Extra-Geld stößt das Mitglied selbst an. Details: [beitrag-sepa.md](beitrag-sepa.md).
+
+Der Zahlungsdienst sieht nur den Vereinsbeitrag, keine Abgabe und keine Gramm-Mengen.
+
 ## ERPNext
 
 Kein ERPNext als Portal oder als Ersatz für den Fachkern. Buchhaltung später über DATEV oder Lexoffice, nicht nachgebaut.

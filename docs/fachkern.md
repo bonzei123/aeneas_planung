@@ -4,10 +4,20 @@ System of Record für alles, was bei Kontrolle oder Jahresmeldung stehen muss. N
 
 ## Portal (FastAPI)
 
-- Nach Login Module zeigen: CAV, Chat (Element), Cloud nur wenn Backoffice-Gruppe.
-- Verein aus Token wählen, wenn jemand mehrere Ämter hat.
-- „Meine Dokumente“: Beitrags-PDF, Abgabebeleg. Quelle ist die CAV-Datenbank bzw. Dateien, die der Kern kennt.
-- Kein React-SPA am Anfang.
+Zwei Flächen, kein zweites ERP.
+
+**Hauptmenü (Linktree, rollenabhängig):** nach dem Login Türen zu Chat (Element), CAV und — nur für Ämter — Nextcloud. Wer mehrere Vereine/Ämter hat, wählt zuerst den Verein.
+
+**Mein Konto:** Stammdaten, soweit das Mitglied sie selbst pflegen darf; Beitrags- und Abgabebelege; Token-Stand; Mitgliedsbeitrag.
+
+Beitragsmodell (aktueller Verein, kann sich beim Neustart ändern):
+
+- Mindestbeitrag **10 €** im Monat per Lastschrift, wird als **Tokens** gutgeschrieben.
+- Zusätzlich kann das Mitglied **manuell einzahlen** (Zahlungslink / Überweisung über den Dienstleister). Auch das wird als Tokens gutgeschrieben.
+- Lastschriftmandat, Einzahlen und Gebühren: siehe [beitrag-sepa.md](beitrag-sepa.md).
+- Höhe, Token-Logik und Zahlweg können sich später ändern; der Platz dafür bleibt „Mein Konto“ im Portal.
+
+Kein React-SPA am Anfang.
 
 ## CAV-Kern (FastAPI, Multi-Tenant)
 
@@ -15,7 +25,7 @@ System of Record für alles, was bei Kontrolle oder Jahresmeldung stehen muss. N
 | --- | --- | --- |
 | Mandant / Verein | `verein_id`, Erlaubnisbezug, 500er-Deckel | 1 |
 | Mitglieder | Alter, Status, Rollen, Token-Gruppen | 1 |
-| Beitrags-PDF | Beleg erzeugen, im Portal zeigen | 2 |
+| Beitrag / Tokens | Soll, Gutschrift, Beleg; Einzug über Zahlungsdienst | 2 |
 | Chargen / Track & Trace | Samen bis Packung, Bestand in Gramm | 3 |
 | Abgabe | Limits 50 g / 30 g (18–21), Empfänger, Sorte, THC | 3 |
 | Vernichtung / Schwund | inkl. Verdacht Abhandenkommen | 4 |
@@ -23,7 +33,7 @@ System of Record für alles, was bei Kontrolle oder Jahresmeldung stehen muss. N
 | §-26-Export | fortlaufend + Jahresmeldung bis 31. Januar, 5 Jahre | 4 |
 | Audit-Log | wer hat wann was gebucht, append-only | immer |
 
-Abgabe ist Dokumentation der Weitergabe an Mitglieder (Selbstkosten), kein Verkaufs-Shop. Die Beitragsrechnung ist Vereinsbeitrag, getrennt vom Abgabebeleg.
+Abgabe ist Dokumentation der Weitergabe an Mitglieder (Selbstkosten), kein Verkaufs-Shop. Der Zahlungsdienstleister zieht **Mitgliedsbeitrag** ein, keine Produktkäufe. Tokens sind interne Gutschrift aus dem Beitrag, getrennt vom Abgabebeleg und von KCanG-Limits (Gramm).
 
 ## Was nicht selbst geschrieben wird
 
@@ -34,6 +44,7 @@ Abgabe ist Dokumentation der Weitergabe an Mitglieder (Selbstkosten), kein Verka
 | Backoffice-Dateien und Office | Nextcloud + Collabora + Kalender |
 | HTTPS | Traefik |
 | Mailserver | externer Anbieter, nicht Mailcow am Tag 1 |
+| SEPA-Lastschrift | Zahlungsdienstleister (z. B. Mollie, GoCardless, Stripe) |
 | Finanzbuchhaltung | DATEV / Lexoffice später |
 | Zutritt / Kameras / SPS | später Geräte, nicht Kern |
 
@@ -41,7 +52,7 @@ Abgabe ist Dokumentation der Weitergabe an Mitglieder (Selbstkosten), kein Verka
 
 - Keycloak → CAV/Portal: OIDC-Token mit Gruppen.
 - Keycloak → Gruppenabgleich → Matrix: Join/Kick.
-- CAV → Portal: Belege und Status.
+- CAV / Portal → Zahlungsdienst: Mandat anlegen, monatlichen Betrag einziehen, Webhook „bezahlt“ → Tokens gutschreiben.
 - CAV ↛ Nextcloud für Mitgliederakten.
 - Matrix ↛ Bestände, Limits, Behördenexport.
 
