@@ -2,17 +2,27 @@
 
 Kein eigenes Helpdesk. **Zammad** (Open Source) mit Keycloak-OIDC. Last bereits mehrere hundert Tickets pro Monat — genau das, wofür Zammad gebaut ist.
 
-Portal bleibt der Einstieg: Link „Support“. Mitglieder und Ämter landen in Zammad, nicht in Nextcloud Deck.
+Portal: Link „Support“ für Eingeloggte. Öffentlichkeit und Nichtmitglieder brauchen **kein Konto**.
 
-## Warum Zammad in Ordnung ist
+## Formulare ohne Login
 
-- Queue, Nummer, Filter, Suche, Zuweisung, Anhänge, Wissenstexte
-- OIDC gegen Keycloak, Gruppen als Agenten-Rollen
-- Organisationen in Zammad ≈ Zweigvereine
-- Agenten = Support und Ämter; Kunden = Mitglieder
-- Kein Rad: ihr konfiguriert, ihr schreibt keinen Ticketkern
+Ein Ticket eröffnen geht ohne Keycloak. Zammad-Webformulare (oder eingebettete Formulare auf der Vereinsseite) mit den Feldern, die ihr braucht.
+
+Mehrere Formulare, jedes fest an eine **Gruppe**:
+
+- Support
+- Vorstand
+- Präventionsbeauftragte
+- Mitgliedschaft / Aufnahme
+- je Zweigverein, wenn nötig
+
+Die anfragende Person klickt zusammen, was ihr anbietet (Verein, Thema, Text, Anhang). Es wird ein Ticket in der richtigen Queue. Antwort per Mail an die angegebene Adresse, ohne Element.
+
+Eingeloggte Mitglieder können zusätzlich über OIDC in Zammad ihre bestehenden Tickets sehen. Agenten (Amt) sind immer mit Konto und MFA drin.
 
 Nicht Nextcloud (Mitglieder haben kein Konto). Nicht FastAPI-Helpdesk.
+
+Queue, Nummer, Filter, Suche, Zuweisung, Anhänge: fertig in Zammad. OIDC für Agenten und eingeloggte Mitglieder. Organisationen ≈ Zweigvereine.
 
 ## Amtsaufgaben
 

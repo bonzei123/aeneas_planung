@@ -5,7 +5,7 @@
 Interne Kommunikation läuft über die vorhandenen Kanäle:
 
 - **Matrix** — Mitglieder und Ämter untereinander
-- **Zammad** — Support und Amtsaufgaben (eingeloggt)
+- **Zammad** — Support, Ämter, Kontakt ohne Login (Formular)
 - **Nextcloud** — nur Backoffice (Kalender, Dateien)
 - **Portal / CAV** — Belege, Beitrag, Fachliches
 
