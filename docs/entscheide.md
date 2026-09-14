@@ -48,6 +48,10 @@ Nein als Portal oder Fachkern. Buchhaltung später DATEV/Lexoffice.
 
 Gleiches Gedankenmodell, Kubernetes. Einstieg bleibt Compose.
 
+## Erscheinungsbild
+
+Alles Web-seitig brandbar (Logo, Name, Farben), mit Abstufungen. Matrix hat kein UI — gebrandet wird **Element**. Handy-Apps aus den Stores bleiben fremd markiert, außer eigenem Build oder Kauf-White-Label. Details: [ci-cd.md](ci-cd.md).
+
 ## Code, den niemand erklärt
 
 Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Moodle, Nextcloud, Traefik, Postgres, Zahlungsdienst.

@@ -20,6 +20,7 @@ Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beit
 | [docs/tickets.md](docs/tickets.md) | Zammad |
 | [docs/moodle.md](docs/moodle.md) | Schulungen, Mitwirkung |
 | [docs/betrieb.md](docs/betrieb.md) | Linux, Backup, Größe |
+| [docs/ci-cd.md](docs/ci-cd.md) | Corporate Identity / Design je App |
 
 ## Nicht das Ziel
 
