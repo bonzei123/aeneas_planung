@@ -1,27 +1,30 @@
 # Aeneas Planung
 
-Planungsrepository für die Server- und Softwarelandschaft eines **Gesamtvereins**, der mehrere Cannabis-Anbauvereinigungen (Zweigvereine) nach dem Konsumcannabisgesetz (KCanG) organisiert.
+Planungsrepository für die Serverlandschaft eines **Gesamtvereins** mit mehreren Cannabis-Anbauvereinigungen nach dem KCanG.
 
-Hier liegt die Architektur, nicht der Anwendungscode. Der KCanG-Fachkern und das Portal entstehen später in eigenen Repositories, in Python (FastAPI), von Hand gepflegt.
+Hier liegt die Architektur, nicht der Anwendungscode. Selbst geschrieben werden später nur **Portal** und **CAV-Kern** (FastAPI) plus ein kleiner Matrix-Gruppenabgleich. Der Rest ist fertige Software (Keycloak, Matrix, Zammad, Moodle, Nextcloud).
 
 ## Zielbild in einem Satz
 
-Ein Keycloak-Konto für jede Person. Mitglieder arbeiten im Portal, im CAV-Kern und in Matrix. Nextcloud mit Collabora bleibt dem Backoffice vorbehalten (Gesamtverein-Mitarbeiter, Vorstände, Prävention, Ausgabe und vergleichbare Ämter).
+Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beitrag) im CAV-Kern. Chat in Matrix, Support in Zammad, Schulung in Moodle, Office nur für Ämter in Nextcloud.
 
 ## Dokumente
 
 | Datei | Inhalt |
 | --- | --- |
-| [docs/entscheide.md](docs/entscheide.md) | Festlegungen (cannaUNITY, Nextcloud, ERPNext, Matrix) |
-| [docs/architektur.md](docs/architektur.md) | Hosts, Docker-Compose, Datenflüsse |
+| [docs/entscheide.md](docs/entscheide.md) | Festlegungen, was fertig vs. selbst |
+| [docs/architektur.md](docs/architektur.md) | Hosts, Compose, Flussbild |
 | [docs/sso-matrix.md](docs/sso-matrix.md) | SSO, Keycloak-Gruppen, Matrix-Spaces |
-| [docs/fachkern.md](docs/fachkern.md) | CAV-Kern, Portal, Mein Konto, was selbst gebaut wird |
-| [docs/beitrag-sepa.md](docs/beitrag-sepa.md) | Tokens, Lastschrift, monatlicher Einzug |
-| [docs/betrieb.md](docs/betrieb.md) | Linux, Backup, Skalierung auf viele Konten |
+| [docs/fachkern.md](docs/fachkern.md) | Portal, CAV, Schnittstellen |
+| [docs/beitrag-sepa.md](docs/beitrag-sepa.md) | Tokens, Lastschrift, Einzahlung |
+| [docs/tickets.md](docs/tickets.md) | Zammad |
+| [docs/moodle.md](docs/moodle.md) | Schulungen, Mitwirkung |
+| [docs/betrieb.md](docs/betrieb.md) | Linux, Backup, Größe |
 
 ## Nicht das Ziel
 
-- Kein Nextcloud-Plugin als Abgabe- oder Anbausystem
+- Kein Nextcloud-Plugin als Abgabe, Helpdesk oder LMS
 - Kein ERPNext als Mitgliederportal
 - Kein OpenDesk/Kubernetes als Einstieg
-- Keine Garantie „KCanG-konform“ durch Software allein; der Verein bleibt verantwortlich
+- Kein selbst gebautes Ticketsystem oder LMS
+- Keine Garantie „KCanG-konform“ durch Software allein

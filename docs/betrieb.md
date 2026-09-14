@@ -2,42 +2,45 @@
 
 ## Einstieg
 
-- Ein Linux-Server (Debian oder Ubuntu LTS)
-- Docker Compose
-- Tägliches Backup nach außen (restic oder borg), inkl. Postgres-Dump und Nextcloud-/Synapse-Medien
-- Updates der Container bewusst, nicht ungesehen automatisch auf Produktion
+- Ein Linux-Server (Debian oder Ubuntu LTS), Docker Compose
+- Backup nach außen (restic/borg): Postgres-Dumps plus Medien von Nextcloud, Moodle, Zammad, Synapse
+- Container-Updates bewusst
 
 ## 15.000 Konten
 
-15.000 Konten sind ein Dachverband (viele Zweigvereine à höchstens 500 Mitglieder), nicht ein Verein. Entscheidend ist Gleichzeitigkeit, nicht die Zahl in der User-Tabelle.
+Viele Zweigvereine à höchstens 500 Mitglieder. Last ist Gleichzeitigkeit und Ticket-/Kursbetrieb, nicht die User-Tabelle.
 
-| Teil | 15.000 Konten auf einem Compose-Host |
+| Teil | Ein Compose-Host |
 | --- | --- |
-| Keycloak | unkritisch |
-| CAV-Kern + Portal | unkritisch, wenn `verein_id` indexiert ist |
-| Matrix | machbar, wenn geschlossen und ohne Video für alle gleichzeitig |
-| Nextcloud für alle Mitglieder | nein, deshalb nur Backoffice |
-| Nextcloud für wenige hundert Ämter | ja, Compose reicht lange |
+| Keycloak, CAV, Portal | ja, indexiert |
+| Matrix geschlossen | ja, ohne Massen-Video |
+| Zammad, hunderte Tickets/Monat | ja; bei 15k eher eigene VM + Suche laut Zammad-Doku |
+| Moodle für alle Mitglieder | ja; bei Last eigene VM |
+| Nextcloud nur wenige hundert Ämter | ja |
+| Nextcloud für alle Mitglieder | nein |
 
-Skalierungspfad, falls nötig: Postgres vom App-Host trennen, Synapse-Worker, Nextcloud unverändert klein lassen. Kubernetes ist kein Startziel.
+Skalierung: Dienste vom App-Host trennen, nicht Kubernetes als Start.
 
 ## Sicherheit, grob
 
-- Homeserver nicht an das öffentliche Matrix-Netz anbinden
-- Raumverzeichnis nicht öffentlich
-- MFA für Backoffice und Vorstände
-- Getrennte Secrets je Dienst, keine Klartext-Passwörter im Git
-- Zugriff auf CAV-Admin und Nextcloud nur aus dem Amt, nicht „alle Mitglieder sind Admin irgendwo“
+- Matrix ohne öffentliche Federation
+- Zammad: Mitglieder sind Kunden, nicht Agenten
+- Moodle: Kurse intern
+- Nextcloud-Client nur Backoffice-Gruppen
+- MFA für Agenten, Vorstände, Moodle-Admins
+- Secrets nicht im Git
 
 ## Reihenfolge zum Einschalten
 
-1. Linux, Traefik, Keycloak, ein Testuser
-2. Portal mit „eingeloggt, Gruppen sichtbar“
+1. Linux, Traefik, Keycloak
+2. Portal: Login, Linktree
 3. CAV: Mandant + Mitglied aus Token
-4. Matrix + Element, SSO-Login
-5. Gruppenabgleich für ein Vereinsbeispiel (Wanne-Eickel)
-6. Nextcloud nur für eine Backoffice-Gruppe, Collabora
-7. Mein Konto: Beitrag, Tokens, Belege
-8. SEPA-Mandat über Zahlungsdienst, monatlicher Worker
-9. Abgabe und Limits
-10. Track & Trace, dann §-26-Export
+4. Zammad + OIDC, Support-Queue
+5. Moodle + OIDC, ein Pflichtkurs
+6. Matrix + Element, Gruppenabgleich
+7. Nextcloud + Collabora nur Backoffice
+8. Mein Konto: Beitrag, Tokens, Schulungsstatus
+9. SEPA über Zahlungsdienst
+10. Zammad-Vorlagen für Amts-Onboarding
+11. Abgabe und Limits
+12. Track & Trace, §-26-Export

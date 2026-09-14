@@ -2,7 +2,7 @@
 
 ## Was SSO von allein kann
 
-Keycloak ist der Identity Provider. Portal, CAV, Nextcloud und Synapse (bzw. Matrix Authentication Service) sind OIDC-Clients desselben Realms.
+Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, Synapse (bzw. MAS), **Zammad** und **Moodle** sind OIDC-Clients desselben Realms.
 
 Ablauf:
 
@@ -10,9 +10,10 @@ Ablauf:
 2. Die nächste App nutzt die bestehende Sitzung, ohne neues Passwort.
 3. Ein Groups-Mapper legt Gruppen in Token bzw. Userinfo.
 4. CAV und Portal lesen die Gruppen und beschränken den Verein und die Funktion.
-5. Der Nextcloud-Client ist in Keycloak auf Backoffice-Gruppen begrenzt. Mitglieder können diesen Client nicht benutzen und werden dort nicht provisioniert.
+5. Der Nextcloud-Client ist auf Backoffice-Gruppen begrenzt. Mitglieder werden dort nicht provisioniert.
+6. Zammad und Moodle: alle aktiven Mitglieder. In Zammad sind Mitglieder Kunden, Ämter Agenten.
 
-Gleiches Login heißt nicht, dass jede App jede Person sieht. Nextcloud und Mitglieder-Matrix teilen sich nur Keycloak, nicht den Dateispeicher.
+Gleiches Login heißt nicht gleiche Sicht. Nextcloud bleibt vom Mitgliederbereich getrennt.
 
 ## Was SSO nicht kann
 
@@ -69,9 +70,10 @@ Element Server Suite „Group Sync“ wäre die Kaufvariante. Für den Solo-Betr
 Mitglied Wanne-Eickel:
 
 1. Login Keycloak
-2. Portal: Belege, Link CAV, Link Chat
+2. Portal: Belege, CAV, Chat, Support, Schulungen
 3. Element: Gesamtverein + NRW + Wanne-Eickel
-4. CAV nur Tenant Wanne-Eickel
-5. kein `cloud.example`
+4. Zammad: eigene Tickets; Moodle: Jahresschulung
+5. CAV nur Tenant Wanne-Eickel
+6. kein `cloud.example`
 
-Vorstand Wanne-Eickel: dasselbe plus Vorstands-Space und Nextcloud (Kalender, Collabora, Vereinsordner).
+Vorstand: dasselbe plus Vorstands-Space, Zammad als Agent, Nextcloud, Amtskurse in Moodle.

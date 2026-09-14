@@ -11,8 +11,10 @@ flowchart TB
   cav[CAV-Kern FastAPI]
   mx[Synapse und Element]
   nc[Nextcloud Collabora]
+  za[Zammad]
+  mo[Moodle]
   pg[(PostgreSQL)]
-  files[NC-Dateispeicher]
+  files[Dateispeicher NC und Moodle]
 
   person --> proxy
   proxy --> kc
@@ -20,15 +22,20 @@ flowchart TB
   proxy --> cav
   proxy --> mx
   proxy --> nc
+  proxy --> za
+  proxy --> mo
   kc --> pg
   portal --> pg
   cav --> pg
   mx --> pg
   nc --> pg
+  za --> pg
+  mo --> pg
   nc --> files
+  mo --> files
 ```
 
-Hervorgehoben als eigener Code: Portal, CAV-Kern, Gruppenabgleich Keycloak nach Matrix. Der Rest sind Container.
+Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles andere fertige Software hinter demselben Keycloak.
 
 ## Hosts
 
@@ -38,46 +45,48 @@ Hervorgehoben als eigener Code: Portal, CAV-Kern, Gruppenabgleich Keycloak nach 
 | `www.example` | Portal | alle Konten |
 | `cav.example` | CAV-Kern | alle, Tenant und Rolle aus Token |
 | `chat.example` | Element / Matrix | Mitglieder und Ämter |
+| `help.example` | Zammad | alle (Mitglied = Kunde, Amt = Agent nach Gruppe) |
+| `learn.example` | Moodle | alle aktiven Mitglieder |
 | `cloud.example` | Nextcloud + Collabora | nur Backoffice-Gruppen |
-
-Die echten Hostnamen stehen später in der Betriebsdokumentation, nicht in diesem Plan.
 
 ## Wer darf wohin
 
-| Rolle | Portal / CAV | Matrix | Nextcloud + Collabora |
-| --- | --- | --- | --- |
-| Mitglied (nur Verein) | eigener Verein, eigene Belege | Allgemein + Bundesland + eigener Ort | nein |
-| Vorstand Zweigverein | Amt im eigenen Tenant | wie Mitglied plus Vorstandsraum | ja |
-| Ausgabe / Prävention / Anbau | jeweilige CAV-Funktion | Diensträume | ja, Dienstordner |
-| Gesamtverein-Mitarbeiter | Mandantenwahl, keine Bestandsvermischung | Dachverband-Spaces | ja, zentrale Ablage |
+| Rolle | Portal / CAV | Matrix | Zammad | Moodle | Nextcloud |
+| --- | --- | --- | --- | --- | --- |
+| Mitglied | eigener Verein, Belege | Allgemein + Land + Ort | eigene Tickets | Kurse / Jahresschulung | nein |
+| Vorstand | Amt im Tenant | plus Vorstand | Agent + eigene Aufgaben | plus Amtskurse | ja |
+| Ausgabe / Prävention / Anbau | CAV-Funktion | Diensträume | je nach Gruppe | Pflicht + Amt | ja |
+| Gesamtverein-Mitarbeiter | Mandantenwahl | Dachverband | globale Queue | Kursadmin | ja |
 
 ## Docker Compose (Einstieg)
 
-Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes.
+Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes. Bei Last Zammad/Moodle/Postgres eher eigene VMs, Compose bleibt das Modell.
 
 | Container | Rolle | Logik |
 | --- | --- | --- |
 | traefik | HTTPS, Hosts | konfigurieren |
-| keycloak + eigene DB | Konten, Gruppen, Client-Rechte | konfigurieren |
+| keycloak + eigene DB | Konten, Gruppen, Clients | konfigurieren |
 | synapse + element (+ MAS) | Chat, Spaces, keine Federation | konfigurieren |
+| zammad + elasticsearch/meilisearch laut Doku | Support und Amts-Tickets | konfigurieren |
+| moodle | Schulungen, Mitwirkungsnachweis | konfigurieren |
 | nextcloud + collabora + redis | Backoffice-Dateien, Kalender, Office | konfigurieren |
-| portal | Start, Module, Mitglieder-PDFs | selbst schreiben |
-| gruppenabgleich | Keycloak-Gruppen nach Matrix-Spaces | selbst schreiben |
-| cav + worker | KCanG-Kern, Multi-Tenant | selbst schreiben |
+| portal | Linktree, Mein Konto, ggf. dünne APIs | selbst schreiben |
+| gruppenabgleich | Keycloak → Matrix-Spaces | selbst schreiben |
+| cav + worker | KCanG-Kern, Multi-Tenant, SEPA-Webhooks | selbst schreiben |
 | postgres / redis / restic | Daten, Jobs, Backup | konfigurieren |
 
-Getrennte Datenbanken (oder mindestens getrennte Schemas) für Keycloak, Nextcloud, Synapse und CAV. Eine gemeinsame Postgres-Instanz am Anfang ist zulässig, solange die Daten nicht in einer Datenbank vermischt werden.
+Getrennte Datenbanken je Dienst. Gemeinsame Postgres-Instanz am Anfang zulässig, getrennte Databases.
 
-CAV spricht **nicht** mit Nextcloud, um Mitglieder-PDFs abzulegen. Vorstandsdateien entstehen in Nextcloud. Mitgliedsbelege erzeugt der CAV-Kern und zeigt sie im Portal unter Mein Konto (Beitrag, Tokens, PDFs).
+CAV spricht nicht mit Nextcloud für Mitglieder-PDFs. Zammad hält Tickets. Moodle hält Kurse. Portal verlinkt und zeigt unter Mein Konto Beitrag, Tokens und grob den Schulungsstatus.
 
-Der monatliche Bankeinzug läuft nicht über die eigene Bank-API, sondern über einen Zahlungsdienstleister. Der CAV-Worker stößt den Einzug an und nimmt Webhooks entgegen; siehe [beitrag-sepa.md](beitrag-sepa.md).
+Zahlungsdienst: [beitrag-sepa.md](beitrag-sepa.md). Tickets: [tickets.md](tickets.md). Schulung: [moodle.md](moodle.md).
 
 ## Mandanten
 
-Ein CAV-Prozess, viele Zweigvereine. Jede fachliche Zeile trägt `verein_id`. Kein eigener Server pro Ortsverein.
+Ein CAV-Prozess, viele Zweigvereine, jede fachliche Zeile mit `verein_id`. Zammad-Organisationen und Moodle-Cohorts spiegeln denselben Verein, führend bleibt Keycloak.
 
-Jedes Zweigverein ist rechtlich eine eigene Anbauvereinigung (eigene Erlaubnis, eigene 500er-Grenze, eigener Bestand, eigene Jahresmeldung). Software darf Bestände nicht vermischen, auch wenn der Gesamtverein die Plattform stellt.
+Jedes Zweigverein ist rechtlich eigene Anbauvereinigung (Erlaubnis, 500er-Grenze, Bestand, Jahresmeldung). Keine Bestandsvermischung.
 
 ## Frontends
 
-Portal und CAV-Kern zuerst als FastAPI mit HTML-Templates, kein separates React-Frontend. Element und Nextcloud bringen ihre eigene Oberfläche mit.
+Portal und CAV: FastAPI plus HTML-Templates. Zammad, Moodle, Element, Nextcloud: deren eigene UI, SSO.

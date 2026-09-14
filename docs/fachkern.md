@@ -1,23 +1,20 @@
 # Fachkern und Portal
 
-System of Record für alles, was bei Kontrolle oder Jahresmeldung stehen muss. Nicht Nextcloud, nicht Matrix.
+System of Record für KCanG-Zahlen: Mitglieder, Chargen, Abgabe, Meldung. Nicht Nextcloud, nicht Matrix, nicht Zammad, nicht Moodle.
 
 ## Portal (FastAPI)
 
-Zwei Flächen, kein zweites ERP.
+**Hauptmenü (Linktree, rollenabhängig):** Chat (Element), CAV, Support (Zammad), Schulungen (Moodle), Cloud nur für Ämter. Zuerst Verein wählen, wenn mehrere Ämter.
 
-**Hauptmenü (Linktree, rollenabhängig):** nach dem Login Türen zu Chat (Element), CAV und — nur für Ämter — Nextcloud. Wer mehrere Vereine/Ämter hat, wählt zuerst den Verein.
+**Mein Konto:** Stammdaten (soweit erlaubt), Belege, Token-Stand, Beitrag, grob Schulungsstatus aus Moodle.
 
-**Mein Konto:** Stammdaten, soweit das Mitglied sie selbst pflegen darf; Beitrags- und Abgabebelege; Token-Stand; Mitgliedsbeitrag.
+Beitragsmodell (änderbar nach Reboot):
 
-Beitragsmodell (aktueller Verein, kann sich beim Neustart ändern):
+- **10 €** im Monat Lastschrift → Tokens
+- manuell einzahlen über den Zahlungsdienst → Tokens
+- Details: [beitrag-sepa.md](beitrag-sepa.md)
 
-- Mindestbeitrag **10 €** im Monat per Lastschrift, wird als **Tokens** gutgeschrieben.
-- Zusätzlich kann das Mitglied **manuell einzahlen** (Zahlungslink / Überweisung über den Dienstleister). Auch das wird als Tokens gutgeschrieben.
-- Lastschriftmandat, Einzahlen und Gebühren: siehe [beitrag-sepa.md](beitrag-sepa.md).
-- Höhe, Token-Logik und Zahlweg können sich später ändern; der Platz dafür bleibt „Mein Konto“ im Portal.
-
-Kein React-SPA am Anfang.
+Kein React-SPA am Anfang. Kein Ticketkern, kein LMS im Portal — nur Links und dünne API (Zammad-Vorlage anlegen, Moodle-Abschluss lesen).
 
 ## CAV-Kern (FastAPI, Multi-Tenant)
 
@@ -33,7 +30,7 @@ Kein React-SPA am Anfang.
 | §-26-Export | fortlaufend + Jahresmeldung bis 31. Januar, 5 Jahre | 4 |
 | Audit-Log | wer hat wann was gebucht, append-only | immer |
 
-Abgabe ist Dokumentation der Weitergabe an Mitglieder (Selbstkosten), kein Verkaufs-Shop. Der Zahlungsdienstleister zieht **Mitgliedsbeitrag** ein, keine Produktkäufe. Tokens sind interne Gutschrift aus dem Beitrag, getrennt vom Abgabebeleg und von KCanG-Limits (Gramm).
+Abgabe ist Weitergabe an Mitglieder (Selbstkosten), kein Shop. Zahlungsdienst zieht **Mitgliedsbeitrag**. Tokens intern, getrennt von Gramm-Limits.
 
 ## Was nicht selbst geschrieben wird
 
@@ -41,21 +38,25 @@ Abgabe ist Dokumentation der Weitergabe an Mitglieder (Selbstkosten), kein Verka
 | --- | --- |
 | Login, MFA, Gruppen | Keycloak |
 | Chat | Synapse + Element |
+| Support / Amts-Tickets | Zammad |
+| Schulungen, Mitwirkungsnachweis | Moodle |
 | Backoffice-Dateien und Office | Nextcloud + Collabora + Kalender |
 | HTTPS | Traefik |
-| Mailserver | externer Anbieter, nicht Mailcow am Tag 1 |
-| SEPA-Lastschrift | Zahlungsdienstleister (z. B. Mollie, GoCardless, Stripe) |
+| Mailserver | externer Anbieter |
+| SEPA-Lastschrift | Mollie / GoCardless / Stripe |
 | Finanzbuchhaltung | DATEV / Lexoffice später |
-| Zutritt / Kameras / SPS | später Geräte, nicht Kern |
+| Zutritt / Kameras / SPS | später Geräte |
 
 ## Schnittstellen
 
-- Keycloak → CAV/Portal: OIDC-Token mit Gruppen.
+- Keycloak → alle Apps: OIDC.
 - Keycloak → Gruppenabgleich → Matrix: Join/Kick.
-- CAV / Portal → Zahlungsdienst: Mandat anlegen, monatlichen Betrag einziehen, Webhook „bezahlt“ → Tokens gutschreiben.
+- Portal → Zammad-API: optional Onboarding-Ticket aus Vorlage.
+- Portal → Moodle-API: optional Kursabschluss für Mein Konto / interne Regel.
+- CAV / Portal → Zahlungsdienst: Mandat, 10-€-Abo, Einzahlung, Webhook → Tokens.
 - CAV ↛ Nextcloud für Mitgliederakten.
-- Matrix ↛ Bestände, Limits, Behördenexport.
+- Zammad/Moodle ↛ Bestände, Limits, Behördenexport.
 
 ## Haftung (kurz)
 
-Die Anbauvereinigung bleibt für Dokumentation und Limits nach KCanG verantwortlich. Software unterstützt, ersetzt keine Erlaubnis und keine Kontrolle. Wer die Software betreibt oder anbietet, muss den Fachkern erklären können.
+Die Anbauvereinigung bleibt für KCanG verantwortlich. Software unterstützt Dokumentation, Limits, Schulungsnachweis und Support; sie ersetzt keine Erlaubnis.

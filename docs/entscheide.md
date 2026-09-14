@@ -6,47 +6,48 @@ Stand der Planung. Änderungen gehören als Commit in dieses Repository, nicht n
 
 Aeneas ist eine **eigene Landschaft**, kein Fork von [cannaUNITY](https://github.com/saschadaemgen/cannaUNITY) als Produkt.
 
-cannaUNITY (archiviert, Pre-Alpha, Django/React, UniFi/SIMATIC, eigene Buchhaltung) ist höchstens Ideenquelle für Track & Trace (Samen bis Ausgabe). Der Code wird nicht als Basis übernommen: Alpha, Hardware-Kopplung, zu breite Featureliste, fremder Kern.
+cannaUNITY ist höchstens Ideenquelle für Track & Trace. Der Code wird nicht übernommen.
 
-## Drei Schichten
+**Regel:** Nur Portal und CAV-Kern (plus der kleine Matrix-Gruppenabgleich) werden selbst geschrieben. Alles andere ist fertige Software hinter Keycloak.
 
-1. **Identität:** Keycloak (ein Realm, mehrere OIDC-Clients).
-2. **Kollaboration nach Zielgruppe:**
-   - Mitglieder: Matrix (Element), geschlossen, ohne Federation.
-   - Backoffice / Ämter: Nextcloud + Collabora + Kalender.
-3. **Fachkern:** eigenes FastAPI (Portal + CAV-Mandanten), PostgreSQL.
+## Schichten
+
+1. **Identität:** Keycloak (ein Realm, viele OIDC-Clients).
+2. **Fertige Apps:** Matrix/Element (Chat), Zammad (Tickets), Moodle (Schulung), Nextcloud+Collabora (nur Backoffice).
+3. **Eigener Fachkern:** FastAPI Portal + CAV-Mandanten, PostgreSQL.
 
 ## Nextcloud
 
-Nextcloud **lohnt sich**, aber nur als Backoffice. Gemeinsames Bearbeiten (Collabora), Kalender, Group Folders für Satzung, Behördenpost, Dienstpläne.
+Nur Backoffice (Ämter, Vorstand, Gesamtverein). Mitglieder bekommen kein Nextcloud-Konto. Belege im Portal.
 
-Nextcloud **lohnt sich nicht** als Heimat von 15.000 Mitgliedern (Desktop-Sync, Talk, persönliche Rechnungsordner für alle). Mitgliedsbelege liegen im CAV-Portal.
+## Matrix
 
-Der Nextcloud-OIDC-Client in Keycloak ist auf Backoffice-Gruppen beschränkt. Mitglieder bekommen kein Nextcloud-Konto.
-
-## Matrix statt Talk / Discord
-
-Mitgliederchat ist Matrix + Element, nicht Nextcloud Talk. Spaces bilden Gesamtverein, Bundesland und Ortsverein ab. Abgabe, Limits und Chargen bleiben im CAV-Kern, nicht im Chat.
+Mitgliederchat, Spaces je Gesamtverein / Land / Ort. Kein Talk, kein Discord-SaaS. Kanalrechte: [sso-matrix.md](sso-matrix.md).
 
 ## Mitgliedsbeitrag und Tokens
 
-Aktuelles Vereinsmodell (änderbar, z. B. nach Reboot):
+- **10 €** fest im Monat per Lastschrift, Tokens.
+- Zusätzlich manuelle Einzahlung per Zahlungslink.
+- Mein Konto im Portal. Einzug: Dienstleister, [beitrag-sepa.md](beitrag-sepa.md).
 
-- Fester Mitgliedsbeitrag **10 €** pro Monat (Lastschrift).
-- Zusätzlich **manuelle Einzahlung** über denselben Zahlungsdienst (Zahlungslink), Betrag frei. Beides wird als **Tokens** gutgeschrieben.
-- Pflege und Übersicht liegen im Portal unter **Mein Konto** (nicht in Nextcloud, nicht in Matrix).
-- Der 10-€-Einzug kommt monatlich vom Dienstleister; Extra-Geld stößt das Mitglied selbst an. Details: [beitrag-sepa.md](beitrag-sepa.md).
+Der Zahlungsdienst sieht nur Beitrag, keine Gramm.
 
-Der Zahlungsdienst sieht nur den Vereinsbeitrag, keine Abgabe und keine Gramm-Mengen.
+## Support: Zammad
+
+Hunderte Tickets pro Monat: **Zammad**, OIDC, kein eigenes Helpdesk, kein Nextcloud-Plugin. Amts-Onboarding über Zammad-Vorlagen/Makros. [tickets.md](tickets.md).
+
+## Schulung: Moodle
+
+Tutorials und jährliche Pflichtschulungen (Mitwirkung / Prävention analog Compliance). Nachweis in Moodle, Link und Status im Portal. [moodle.md](moodle.md).
 
 ## ERPNext
 
-Kein ERPNext als Portal oder als Ersatz für den Fachkern. Buchhaltung später über DATEV oder Lexoffice, nicht nachgebaut.
+Nein als Portal oder Fachkern. Buchhaltung später DATEV/Lexoffice.
 
 ## OpenDesk
 
-OpenDesk ist dasselbe Gedankenmodell (SSO, Nextcloud, Element), aber Kubernetes-Betrieb. Einstieg ist Docker Compose auf Linux. OpenDesk nur, wenn später bewusst Groupware in dem Umfang gebraucht wird.
+Gleiches Gedankenmodell, Kubernetes. Einstieg bleibt Compose.
 
 ## Code, den niemand erklärt
 
-Der CAV-Kern, das Portal und der Matrix-Gruppenabgleich werden selbst geschrieben und sollen Zeile für Zeile erklärbar sein. Fertigsoftware (Keycloak, Synapse, Nextcloud, Traefik, Postgres) wird konfiguriert, nicht neu implementiert.
+Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Moodle, Nextcloud, Traefik, Postgres, Zahlungsdienst.
