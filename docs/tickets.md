@@ -35,3 +35,5 @@ Der einzige eigene Code: optional Portal ruft Zammad-API auf, wenn eine Keycloak
 Eigener Host `help.example`, eigene Postgres, Redis wie in der Zammad-Doku. Backup der Zammad-Daten. Agenten mit MFA.
 
 Portal verlinkt, speichert keine Ticket-Texte doppelt.
+
+Nichtmitglieder und die Öffentlichkeit erreichen denselben Helpdesk ohne Login: Webformular und Funktionspostfächer beim Mailanbieter, siehe [mail.md](mail.md).

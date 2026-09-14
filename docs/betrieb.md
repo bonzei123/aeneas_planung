@@ -29,6 +29,7 @@ Skalierung: Dienste vom App-Host trennen, nicht Kubernetes als Start.
 - Nextcloud-Client nur Backoffice-Gruppen
 - MFA für Agenten, Vorstände, Moodle-Admins
 - Secrets nicht im Git
+- Kein eigener Mailserver; SMTP/IMAP beim Anbieter, siehe [mail.md](mail.md)
 
 ## Reihenfolge zum Einschalten
 

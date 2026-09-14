@@ -40,6 +40,10 @@ Hunderte Tickets pro Monat: **Zammad**, OIDC, kein eigenes Helpdesk, kein Nextcl
 
 Tutorials und jährliche Pflichtschulungen (Mitwirkung / Prävention analog Compliance). Nachweis in Moodle, Link und Status im Portal. [moodle.md](moodle.md).
 
+## Mail
+
+Kein eigener Mailserver. Intern: Matrix, Zammad, Nextcloud, Portal. Nach außen und für Passwortreset: Postfächer plus SMTP beim Anbieter. Nichtmitglieder erreichen Ämter über Zammad-Formular oder Funktionsmail, nicht über private Adressen. [mail.md](mail.md).
+
 ## ERPNext
 
 Nein als Portal oder Fachkern. Buchhaltung später DATEV/Lexoffice.
