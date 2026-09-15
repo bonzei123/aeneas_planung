@@ -9,11 +9,25 @@ Ablauf:
 1. Person meldet sich einmal an Keycloak an (optional MFA).
 2. Die nächste App nutzt die bestehende Sitzung, ohne neues Passwort.
 3. Ein Groups-Mapper legt Gruppen in Token bzw. Userinfo.
-4. CAV und Portal lesen die Gruppen: Tenant aus `verein:*`, Berechtigung aus den Funktionsgruppen.
+4. CAV und Portal lesen die Claims: Tenant aus `verein:*`, Berechtigung aus `rolle:*` bzw. `backoffice`.
 5. Der Nextcloud-Client ist auf Backoffice-Gruppen begrenzt. Mitglieder werden dort nicht provisioniert.
 6. Zammad und Moodle: alle aktiven Mitglieder. In Zammad sind Mitglieder Kunden, Ämter Agenten.
 
 Gleiches Login heißt nicht gleiche Sicht. Nextcloud bleibt vom Mitgliederbereich getrennt.
+
+## SSO und Berechtigung
+
+OIDC ist nur die Anmeldung (wer ist das). **Berechtigung** (was darf die Person) liegt in denselben Keycloak-Gruppen, die der Groups-Mapper ins Access-Token bzw. Userinfo schreibt. Die Apps werten die Claims aus; es gibt kein zweites Rechtesystem „nur für SSO“.
+
+| Schicht | Ort | Beispiel |
+| --- | --- | --- |
+| Authentifizierung | Keycloak Login / Token | Sub, E-Mail, Session |
+| Autorisierung (RBAC) | Gruppen im Token | `verein:wanne-eickel`, `rolle:ausgabe` |
+| Fachliche Objekt-Rechte | CAV-Datenbank | diese Abgabe, diese Charge, 500er-Deckel |
+
+Keycloak Authorization Services (UMA, Policies pro Resource) nicht nutzen. Zu komplex für den Solo-Betrieb; CAV prüft Objekt-Rechte selbst, Rollen kommen aus dem Token.
+
+Nextcloud, Zammad, Moodle: jeweilige IdP-/Group-Mapper auf dieselben Gruppennamen. Matrix: nicht nativ, eigener Abgleich (unten).
 
 ## Was SSO nicht kann
 
@@ -30,24 +44,29 @@ Zwei Achsen, kein Kreuzprodukt:
 | Achse | Anzahl | Beispiel | Bedeutung |
 | --- | --- | --- | --- |
 | Organisation | 1 Gruppe pro Zweigverein (+ optional Bundesland) | `verein:wanne-eickel`, `bundesland:nrw` | wo die Person zugeordnet ist |
-| Funktion | festes, kleines Set | `mitgliedschaft:aktiv`, `rolle:vorstand`, `amt:ausgabe`, `amt:praevention`, `amt:anbau`, `backoffice` | was die Person darf |
+| Funktion | festes Set | `mitgliedschaft:aktiv`, `rolle:vorstand`, `rolle:ap`, `rolle:praevb`, `rolle:ausgabe`, `rolle:anbau`, `backoffice` | was die Person darf |
 
-Bei 180 Zweigvereinen: 180 `verein:*`-Gruppen plus etwa 10 Funktionsgruppen, nicht 180×3. Vorstand von Wanne-Eickel = `verein:wanne-eickel` **und** `rolle:vorstand`. Prävention analog: `verein:wanne-eickel` **und** `amt:praevention`.
+Bei 180 Zweigvereinen: 180 `verein:*` plus das Funktionsset, nicht 180×Rollen. Ausgabe in Wanne-Eickel = `verein:wanne-eickel` **und** `rolle:ausgabe`. PräVB analog: `verein:wanne-eickel` **und** `rolle:praevb`.
 
 Keine Gruppen `verein:<slug>:mitglied` / `verein:<slug>:vorstand`. Tenant im CAV kommt aus genau einer `verein:*`-Gruppe. KCanG-Mitgliedschaft in mehr als einem Anbauverein ist rechtlich eingeschränkt; der Fachkern prüft das, nicht Keycloak. Backoffice sieht Mandanten in der CAV-UI über `backoffice`, nicht über 180 Vereinsgruppen.
 
 `verein:*`-Gruppen später aus dem CAV-Mandantenstamm erzeugen oder importieren, nicht 180-mal per Hand in der Admin-Konsole.
 
-| Keycloak-Gruppe | Bedeutung |
-| --- | --- |
-| `mitgliedschaft:aktiv` | beitragsfähiges Mitglied |
-| `bundesland:nrw` | Landesebene (optional, Matrix-Space) |
-| `verein:wanne-eickel` | Zweigverein (Tenant) |
-| `rolle:vorstand` | Vorstand des eigenen Vereins |
-| `amt:ausgabe` | Ausgabestelle (dienstlich) |
-| `amt:praevention` | Präventionsbeauftragte |
-| `amt:anbau` | Anbauteam |
-| `backoffice` | Gesamtverein-Mitarbeiter |
+Funktionsgruppen (ein Präfix `rolle:`, keine `amt:*`-Duplikate):
+
+| Keycloak-Gruppe | Art | Bedeutung |
+| --- | --- | --- |
+| `mitgliedschaft:aktiv` | Status | beitragsfähiges Mitglied |
+| `bundesland:nrw` | Organisation | Landesebene (optional, Matrix-Space) |
+| `verein:wanne-eickel` | Organisation | Zweigverein (Tenant) |
+| `rolle:vorstand` | Amt | Vorstand des eigenen Vereins |
+| `rolle:ap` | Amt | Ansprechpartner (Behörde / außen) |
+| `rolle:praevb` | Amt | Präventionsbeauftragte |
+| `rolle:ausgabe` | Dienst | Ausgabe; CAV-Abgabe, mehrere Personen pro Verein |
+| `rolle:anbau` | Dienst | Anbauteam |
+| `backoffice` | Dienst | Gesamtverein-Mitarbeiter |
+
+Vorstand, AP, PräVB sind satzungsgemäße bzw. KCanG-Ämter (oft wenige Personen). Ausgabe ist ebenfalls eine **Rolle**, aber betrieblich: Schichtpersonal, das abgibt — nicht 180 Gruppen, eine globale `rolle:ausgabe`. Wer beides ist (Vorstand, der auch ausgibt), bekommt beide Funktionsgruppen.
 
 ## Matrix-Spaces zum selben Beispiel
 
@@ -59,7 +78,9 @@ Ableitung: Space des Vereins aus `verein:*`; Vorstands-Space nur wenn zusätzlic
 | `bundesland:nrw` | Space NRW | kein Konto |
 | `verein:wanne-eickel` | Space Wanne-Eickel: Ort, Termine, Vereinschat | kein Konto |
 | zusätzlich `rolle:vorstand` | Space Vorstand Wanne-Eickel | Konto, Group Folder, Kalender |
-| `amt:ausgabe` | Dienstraum Ausgabe (nicht die Abgabebuchung) | Konto, Dienstordner |
+| zusätzlich `rolle:ap` | Dienstraum Ansprechpartner | Konto, Amt-Ordner |
+| zusätzlich `rolle:praevb` | Dienstraum Prävention | Konto, Amt-Ordner |
+| zusätzlich `rolle:ausgabe` | Dienstraum Ausgabe (nicht die Abgabebuchung) | Konto, Dienstordner |
 
 Kindräume mit Join-Regel `restricted`: nur wer im Space ist, darf beitreten. Raumverzeichnis nicht öffentlich. Federation aus.
 

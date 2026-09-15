@@ -14,13 +14,13 @@ Betrieb: **Docker Compose**, ggf. mehrere VMs, kein Kubernetes. GitHub: Infra-Co
 
 ## Schichten
 
-1. **Identität:** Keycloak (ein Realm, viele OIDC-Clients).
+1. **Identität und RBAC:** Keycloak (ein Realm, viele OIDC-Clients). Gruppen im Token sind die Berechtigung; Katalog [sso-matrix.md](sso-matrix.md).
 2. **Fertige Apps:** Matrix/Element (Chat), Zammad (Tickets), Moodle (Schulung), Nextcloud+Collabora (nur Backoffice).
 3. **Eigener Fachkern:** FastAPI Portal + CAV-Mandanten, PostgreSQL.
 
 ## Nextcloud
 
-Nur Backoffice (Ämter, Vorstand, Gesamtverein). Mitglieder bekommen kein Nextcloud-Konto. Belege im Portal.
+Nur Backoffice (Vorstand, AP, PräVB, Ausgabe, Anbau, Gesamtverein). Mitglieder bekommen kein Nextcloud-Konto. Belege im Portal.
 
 ## Matrix
 

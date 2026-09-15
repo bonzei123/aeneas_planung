@@ -54,8 +54,8 @@ Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles an
 | Rolle | Portal / CAV | Matrix | Zammad | Moodle | Nextcloud |
 | --- | --- | --- | --- | --- | --- |
 | Mitglied | eigener Verein, Belege | Allgemein + Land + Ort | eigene Tickets | Kurse / Jahresschulung | nein |
-| Vorstand | Amt im Tenant | plus Vorstand | Agent + eigene Aufgaben | plus Amtskurse | ja |
-| Ausgabe / Prävention / Anbau | CAV-Funktion | Diensträume | je nach Gruppe | Pflicht + Amt | ja |
+| Vorstand / AP / PräVB | Amt im Tenant | plus Amts-Space | Agent + eigene Aufgaben | plus Amtskurse | ja |
+| Ausgabe / Anbau | CAV-Funktion (Abgabe bzw. Bestand) | Diensträume | in der Regel Kunde, nicht Agent | Pflicht + Dienst | ja |
 | Gesamtverein-Mitarbeiter | Mandantenwahl | Dachverband | globale Queue | Kursadmin | ja |
 
 ## Docker Compose (Einstieg)
