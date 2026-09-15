@@ -10,6 +10,8 @@ cannaUNITY ist höchstens Ideenquelle für Track & Trace. Der Code wird nicht ü
 
 **Regel:** Nur Portal und CAV-Kern (plus der kleine Matrix-Gruppenabgleich) werden selbst geschrieben. Alles andere ist fertige Software hinter Keycloak.
 
+Betrieb: **Docker Compose**, ggf. mehrere VMs, kein Kubernetes. GitHub: Infra-Compose plus Portal/CAV — nicht ein Repo pro Upstream-Produkt. [repos-und-docker.md](repos-und-docker.md).
+
 ## Schichten
 
 1. **Identität:** Keycloak (ein Realm, viele OIDC-Clients).

@@ -22,6 +22,7 @@ Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beit
 | [docs/betrieb.md](docs/betrieb.md) | Linux, Backup, Größe |
 | [docs/ci-cd.md](docs/ci-cd.md) | Corporate Identity / Design je App |
 | [docs/mail.md](docs/mail.md) | Kein Mailserver, Kontakt nach außen |
+| [docs/repos-und-docker.md](docs/repos-und-docker.md) | Compose reicht; welche GitHub-Repos |
 
 ## Nicht das Ziel
 

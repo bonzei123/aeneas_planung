@@ -19,7 +19,7 @@ Viele Zweigvereine à höchstens 500 Mitglieder. Last ist Gleichzeitigkeit und T
 | Nextcloud nur wenige hundert Ämter | ja |
 | Nextcloud für alle Mitglieder | nein |
 
-Skalierung: Dienste vom App-Host trennen, nicht Kubernetes als Start.
+Skalierung: Dienste vom App-Host trennen, nicht Kubernetes als Start. Docker Compose bleibt das Werkzeug; Details: [repos-und-docker.md](repos-und-docker.md).
 
 ## Sicherheit, grob
 
