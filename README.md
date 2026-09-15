@@ -24,6 +24,8 @@ Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beit
 | [docs/mail.md](docs/mail.md) | Kein Mailserver, Kontakt nach außen |
 | [docs/repos-und-docker.md](docs/repos-und-docker.md) | Compose reicht; welche GitHub-Repos |
 
+Go-Live und Keycloak-Klicks (lokale Extra-Schritte markiert): `aeneas_infra/SETUP.md`.
+
 ## Nicht das Ziel
 
 - Kein Nextcloud-Plugin als Abgabe, Helpdesk oder LMS
