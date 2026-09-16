@@ -42,7 +42,7 @@ Der einzige eigene Code: optional Portal ruft Zammad-API auf, wenn eine Keycloak
 
 ## Betrieb
 
-Eigener Host `help.example`, eigene Postgres, Redis wie in der Zammad-Doku. Backup der Zammad-Daten. Agenten mit MFA.
+Eigener Host `help.example`, Overlay `aeneas_infra/compose.zammad.yml`, eigene Postgres-Instanz plus Elasticsearch. Backup der Zammad-Volumes. Agenten mit MFA.
 
 Portal verlinkt, speichert keine Ticket-Texte doppelt.
 
