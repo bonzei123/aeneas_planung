@@ -35,7 +35,7 @@ Zwei Eingänge, beide landen in derselben Queue:
 
 Der Vorstand arbeitet das Ticket als Agent ab. Die Außenstehende sieht E-Mail oder das Ticket-Portal von Zammad, nicht Matrix. Private Gmail/Telefonticker der Gewählten bleiben intern.
 
-Nach der Aufnahme: Keycloak-Konto, dann Matrix und eingeloggter Support wie alle anderen.
+Nach dem Absenden des Aufnahmeformulars: Keycloak-Konto mit `mitgliedschaft:pending`, dann Matrix erst nach Wechsel auf `aktiv`.
 
 Impressum und Satzung brauchen eine Kontaktmöglichkeit — Formular plus eine Funktionsmail reichen, ein eigener Mailserver nicht.
 

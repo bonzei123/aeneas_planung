@@ -14,7 +14,7 @@ Betrieb: **Docker Compose**, ggf. mehrere VMs, kein Kubernetes. GitHub: Infra-Co
 
 ## Schichten
 
-1. **Identität und RBAC:** Keycloak (ein Realm, viele OIDC-Clients). Gruppen im Token sind die Berechtigung; Katalog [sso-matrix.md](sso-matrix.md).
+1. **Identität und RBAC:** Keycloak (ein Realm, viele OIDC-Clients). Gruppen im Token sind die Berechtigung; Katalog [sso-matrix.md](sso-matrix.md). Mitgliedschaftsstatus genau einer von `pending` / `aktiv` / `beendet`; Login unabhängig von der Abgabe.
 2. **Fertige Apps:** Matrix/Element (Chat), Zammad (Tickets), Moodle (Schulung), Nextcloud+Collabora (nur Backoffice).
 3. **Eigener Fachkern:** FastAPI Portal + CAV-Mandanten, PostgreSQL.
 

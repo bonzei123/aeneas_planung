@@ -46,14 +46,16 @@ Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles an
 | `cav.example` | CAV-Kern | alle, Tenant und Rolle aus Token |
 | `chat.example` | Element / Matrix | Mitglieder und Ämter |
 | `help.example` | Zammad | alle (Mitglied = Kunde, Amt = Agent nach Gruppe) |
-| `learn.example` | Moodle | alle aktiven Mitglieder |
+| `learn.example` | Moodle | `mitgliedschaft:aktiv` |
 | `cloud.example` | Nextcloud + Collabora | nur Backoffice-Gruppen |
 
 ## Wer darf wohin
 
 | Rolle | Portal / CAV | Matrix | Zammad | Moodle | Nextcloud |
 | --- | --- | --- | --- | --- | --- |
-| Mitglied | eigener Verein, Belege | Allgemein + Land + Ort | eigene Tickets | Kurse / Jahresschulung | nein |
+| pending | Antrag, kein Abgeben | nein | eigene Tickets (Kunde) | nein | nein |
+| Mitglied (aktiv) | eigener Verein, Belege, Abgabe | Allgemein + Land + Ort | eigene Tickets | Kurse / Jahresschulung | nein |
+| beendet | Belege, Historie, kein Abgeben | Kick | eigene Tickets (Kunde) | nein | nein |
 | Vorstand / AP / PräVB | Amt im Tenant | plus Amts-Space | Agent + eigene Aufgaben | plus Amtskurse | ja |
 | Ausgabe / Anbau | CAV-Funktion (Abgabe bzw. Bestand) | Diensträume | in der Regel Kunde, nicht Agent | Pflicht + Dienst | ja |
 | Gesamtverein-Mitarbeiter | Mandantenwahl | Dachverband | globale Queue | Kursadmin | ja |
