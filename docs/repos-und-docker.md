@@ -4,19 +4,19 @@
 
 Ja, für diese Landschaft und einen Solo-Betrieb. Kubernetes ist kein Ziel. Alles außer Portal und CAV-Kern sind **offizielle Images**; ihr schreibt Compose-Dateien und Konfiguration, nicht Keycloak oder Zammad neu.
 
-Compose kommt mit der **Stückzahl der Container** klar. Was kippt, ist ein zu kleiner einzelner Server (RAM: Synapse, Zammad inkl. Suche, Moodle, Nextcloud, Postgres). Nicht die YAML.
+Compose kommt mit der **Stückzahl der Container** klar. Was kippt, ist ein zu kleiner einzelner Server (RAM: Synapse, Zammad inkl. Suche, Nextcloud, Collabora, Postgres). Frappe Learning ist kein Moodle-Brocken. Nicht die YAML.
 
 Praktisch:
 
 1. **Start:** ein Linux-Host, ein Compose-Projekt (oder wenige Dateien mit `include`), Traefik davor.
-2. **Wenn der Kasten voll ist:** denselben Compose-Stil auf **mehrere VMs** (z. B. VM Chat, VM Tickets+Moodle, VM Cloud, VM IdP+Portal+CAV). Immer noch Docker Compose, nur geteilte Hosts.
+2. **Wenn der Kasten voll ist:** denselben Compose-Stil auf **mehrere VMs** (z. B. VM Chat, VM Tickets, VM Cloud, VM IdP+Portal+CAV+LMS). Immer noch Docker Compose, nur geteilte Hosts.
 3. **15.000 Konten:** so teilen, nicht auf k8s umsteigen, solange ihr allein seid.
 
 Offizielle Compose-Vorlagen von Zammad, Nextcloud, Keycloak als Ausgang, an eure Traefik-Labels und `.env` anpassen. Images pinnen (Versions-Tags), nicht `latest` in Produktion.
 
 ## Eigene Repos — nicht pro Produkt
 
-**Nein:** kein `aeneas_keycloak`, `aeneas_zammad`, `aeneas_moodle`, `aeneas_nextcloud`. Das wären Forks fremder Software. Updates würden euch erschlagen, und ihr pflegt nichts, was ihr nicht geschrieben habt.
+**Nein:** kein `aeneas_keycloak`, `aeneas_zammad`, `aeneas_frappe`, `aeneas_moodle`, `aeneas_nextcloud`. Das wären Forks fremder Software. Updates würden euch erschlagen, und ihr pflegt nichts, was ihr nicht geschrieben habt.
 
 | Repo | Inhalt |
 | --- | --- |

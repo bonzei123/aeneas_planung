@@ -15,7 +15,7 @@ Zentrale Dateien (Logo, Farbe, Schrift) einmal festlegen und in jedes Produkt ü
 | Matrix | kein UI | entfällt |
 | Element Web / Desktop | Logo, Name, Farben, Welcome — kein komplettes Private Label | Store-App heißt „Element“, außer eigener Build |
 | Zammad | Name, Logo, CSS | entfällt (Browser) |
-| Moodle | sehr gut (Themes) | offizielle App oder kostenpflichtige Branded App |
+| Frappe Learning | Name, Logo, Farben in Settings | entfällt (Browser) |
 | Nextcloud | Theming-App (Name, Logo, Farbe) | offizielle Clients oder GmbH-Branding |
 
 ## Keycloak
@@ -48,11 +48,11 @@ Andere Matrix-Clients (FluffyChat, Cinny) sind teils leichter zu themen, dann ha
 
 Ja, ohne Fork. Unter Einstellungen → Branding: **Produktname**, **Logo** (Login und Oberfläche). Zusätzlich eigenes CSS. Reicht für Helpdesk unter Vereinsnamen („Aeneas Support“ statt „Zammad Helpdesk“).
 
-## Moodle
+## Frappe Learning
 
-Ja, das ist eine Moodle-Stärke. Theme **Boost** (oder ein Child/Premium-Theme): Logo, Farben, Login, SCSS. Kurse sehen nach Verein aus, nicht nach „Moodle.org“.
+Ja, ohne Moodle-Theme-Ballast. Unter Settings → Branding: Name, Logo, Favicon, Farben. Login über Keycloak, also dasselbe Login-Theme wie der Rest.
 
-Handy: die normale **Moodle App** verbindet sich mit eurer URL, trägt aber Moodle-Branding. Eine **Branded Moodle App** (Name, Icon, Farben, Stores) ist ein kostenpflichtiger Dienst von Moodle HQ. Für den Start: Browser + Theme, App später.
+Keine Store-App. Start: Browser, gebrandet. Kurse sollen nach Verein aussehen, nicht nach „Frappe“.
 
 ## Nextcloud
 
@@ -66,4 +66,4 @@ Collabora: nur schwach thembar; im iFrame der Cloud oft akzeptabel.
 
 Hauptmenü, Mein Konto, CAV-Oberfläche: euer HTML/CSS. Das soll die **Führungs-CI** sein (Farbe, Logo, Schrift). Die anderen Apps nähern sich dem an, ersetzen es nicht pixelgleich.
 
-Praktische Reihenfolge: Logo+Farbpalette definieren → Keycloak-Login → Portal → Element Web → Zammad → Moodle → Nextcloud. Store-Apps nicht als erstes versprechen.
+Praktische Reihenfolge: Logo+Farbpalette definieren → Keycloak-Login → Portal → Element Web → Zammad → Frappe Learning → Nextcloud. Store-Apps nicht als erstes versprechen.

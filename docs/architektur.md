@@ -12,9 +12,10 @@ flowchart TB
   mx[Synapse und Element]
   nc[Nextcloud Collabora]
   za[Zammad]
-  mo[Moodle]
+  lms[Frappe Learning]
   pg[(PostgreSQL)]
-  files[Dateispeicher NC und Moodle]
+  mdb[(MariaDB LMS)]
+  files[Dateispeicher NC und LMS]
 
   person --> proxy
   proxy --> kc
@@ -23,46 +24,50 @@ flowchart TB
   proxy --> mx
   proxy --> nc
   proxy --> za
-  proxy --> mo
+  proxy --> lms
   kc --> pg
   portal --> pg
   cav --> pg
   mx --> pg
   nc --> pg
   za --> pg
-  mo --> pg
+  lms --> mdb
   nc --> files
-  mo --> files
+  lms --> files
+  lms -.-> cav
+  cav -.-> kc
 ```
 
-Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles andere fertige Software hinter demselben Keycloak.
+Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles andere fertige Software hinter demselben Keycloak. LMS-Abschluss → CAV → Gruppe `schulung:*` in Keycloak.
 
 ## Hosts
 
 | Host | Dienst | Wer kommt rein |
 | --- | --- | --- |
 | `id.example` | Keycloak | alle Konten |
-| `www.example` | Portal | alle Konten |
-| `cav.example` | CAV-Kern | alle, Tenant und Rolle aus Token |
-| `chat.example` | Element / Matrix | Mitglieder und Ämter |
+| `www.example` | Portal | alle Konten; Aufnahmeformular auch ohne Login |
+| `cav.example` | CAV-Kern | alle, Tenant und Rolle aus Token; Fachzugriff zusätzlich `schulung:*` |
+| `chat.example` | Element / Matrix | `mitgliedschaft:aktiv` **und** `schulung:chat` |
 | `help.example` | Zammad | alle (Mitglied = Kunde, Amt = Agent nach Gruppe) |
-| `learn.example` | Moodle | `mitgliedschaft:aktiv` |
+| `learn.example` | Frappe Learning | `mitgliedschaft:aktiv` |
 | `cloud.example` | Nextcloud + Collabora | nur Backoffice-Gruppen |
 
 ## Wer darf wohin
 
-| Rolle | Portal / CAV | Matrix | Zammad | Moodle | Nextcloud |
+| Rolle | Portal / CAV | Matrix | Zammad | Schulung | Nextcloud |
 | --- | --- | --- | --- | --- | --- |
 | pending | Antrag, kein Abgeben | nein | eigene Tickets (Kunde) | nein | nein |
-| Mitglied (aktiv) | eigener Verein, Belege, Abgabe | Allgemein + Land + Ort | eigene Tickets | Kurse / Jahresschulung | nein |
+| Mitglied (aktiv) | Belege; Rest nach `schulung:onboarding` / Prävention | nur mit `schulung:chat` | eigene Tickets | Onboarding, Prävention, Chat-Regeln, intern | nein |
 | beendet | Belege, Historie, kein Abgeben | Kick | eigene Tickets (Kunde) | nein | nein |
-| Vorstand / AP / PräVB | Amt im Tenant | plus Amts-Space | Agent + eigene Aufgaben | plus Amtskurse | ja |
-| Ausgabe / Anbau | CAV-Funktion (Abgabe bzw. Bestand) | Diensträume | in der Regel Kunde, nicht Agent | Pflicht + Dienst | ja |
+| Vorstand / AP / PräVB | Amt im Tenant (plus Amtskurse) | plus Amts-Space, ebenfalls `schulung:chat` | Agent + eigene Aufgaben | plus Amtskurse | ja |
+| Ausgabe / Anbau | CAV-Funktion nach `schulung:ausgabe` bzw. Dienstkurs | Diensträume | in der Regel Kunde, nicht Agent | Pflicht + Dienst | ja |
 | Gesamtverein-Mitarbeiter | Mandantenwahl | Dachverband | globale Queue | Kursadmin | ja |
+
+Feinkatalog der Türen: [schulungen.md](schulungen.md).
 
 ## Docker Compose (Einstieg)
 
-Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes. Bei Last Zammad/Moodle/Postgres eher eigene VMs, Compose bleibt das Modell.
+Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes. Bei Last Zammad/Synapse/Postgres eher eigene VMs, Compose bleibt das Modell. Frappe Learning ist schlanker als Moodle; eigene VM erst bei Last, nicht von Tag eins.
 
 | Container | Rolle | Logik |
 | --- | --- | --- |
@@ -70,25 +75,25 @@ Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes. Bei Last Zammad/Moodle/Postgr
 | keycloak + eigene DB | Konten, Gruppen, Clients | konfigurieren |
 | synapse + element (+ MAS) | Chat, Spaces, keine Federation | konfigurieren |
 | zammad + elasticsearch/meilisearch laut Doku | Support und Amts-Tickets | konfigurieren |
-| moodle | Schulungen, Mitwirkungsnachweis | konfigurieren |
+| frappe-learning + MariaDB + Redis | Schulungen, Mitwirkungsnachweis | konfigurieren |
 | nextcloud + collabora + redis | Backoffice-Dateien, Kalender, Office | konfigurieren |
-| portal | Linktree, Mein Konto, ggf. dünne APIs | selbst schreiben |
-| gruppenabgleich | Keycloak → Matrix-Spaces | selbst schreiben |
-| cav + worker | KCanG-Kern, Multi-Tenant, SEPA-Webhooks | selbst schreiben |
+| portal | Linktree, Aufnahme, Mein Konto, dünne APIs | selbst schreiben |
+| gruppenabgleich | Keycloak → Matrix-Spaces (inkl. `schulung:chat`) | selbst schreiben |
+| cav + worker | KCanG-Kern, Multi-Tenant, SEPA-Webhooks, LMS-Abschlüsse → `schulung:*` | selbst schreiben |
 | postgres / redis / restic | Daten, Jobs, Backup | konfigurieren |
 
-Getrennte Datenbanken je Dienst. Gemeinsame Postgres-Instanz am Anfang zulässig, getrennte Databases.
+Getrennte Datenbanken je Dienst. Gemeinsame Postgres-Instanz am Anfang zulässig, getrennte Databases. LMS: MariaDB daneben, nicht in denselben Postgres zwingen.
 
-CAV spricht nicht mit Nextcloud für Mitglieder-PDFs. Zammad hält Tickets. Moodle hält Kurse. Portal verlinkt und zeigt unter Mein Konto Beitrag, Tokens und grob den Schulungsstatus.
+CAV spricht nicht mit Nextcloud für Mitglieder-PDFs. Zammad hält Tickets. Frappe Learning hält Kurse. CAV hält Nachweise und Türen. Portal verlinkt und zeigt unter Mein Konto Beitrag, Tokens und grob den Schulungsstatus.
 
-Zahlungsdienst: [beitrag-sepa.md](beitrag-sepa.md). Tickets: [tickets.md](tickets.md). Schulung: [moodle.md](moodle.md).
+Zahlungsdienst: [beitrag-sepa.md](beitrag-sepa.md). Tickets: [tickets.md](tickets.md). Schulung: [schulungen.md](schulungen.md).
 
 ## Mandanten
 
-Ein CAV-Prozess, viele Zweigvereine, jede fachliche Zeile mit `verein_id`. Zammad-Organisationen und Moodle-Cohorts spiegeln denselben Verein, führend bleibt Keycloak.
+Ein CAV-Prozess, viele Zweigvereine, jede fachliche Zeile mit `verein_id`. Zammad-Organisationen spiegeln denselben Verein, führend bleibt Keycloak. LMS eine Instanz, keine 180 Schulungsplattformen.
 
 Jedes Zweigverein ist rechtlich eigene Anbauvereinigung (Erlaubnis, 500er-Grenze, Bestand, Jahresmeldung). Keine Bestandsvermischung.
 
 ## Frontends
 
-Portal und CAV: FastAPI plus HTML-Templates. Zammad, Moodle, Element, Nextcloud: deren eigene UI, SSO.
+Portal und CAV: FastAPI plus HTML-Templates. Zammad, Frappe Learning, Element, Nextcloud: deren eigene UI, SSO. Mitglieder sehen Aufnahme und Schulungsstatus im Portal, nicht als Zammad-Ticketmaske.

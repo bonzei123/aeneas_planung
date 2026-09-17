@@ -4,16 +4,17 @@ Kein eigenes Helpdesk. **Zammad** (Open Source) mit Keycloak-OIDC. Last bereits 
 
 Portal: Link „Support“ für Eingeloggte. Öffentlichkeit und Nichtmitglieder brauchen **kein Konto**.
 
+Mitglieder sehen Zammad nicht als Vereins-Hauptweg. Keine Ticket-Vorlage als „Mitglied werden“ — das wirkt nach Helpdesk, nicht nach Verein. Aufnahme: [fachkern.md](fachkern.md), [mail.md](mail.md).
+
 ## Formulare ohne Login
 
-Ein Ticket eröffnen geht ohne Keycloak. Zammad-Webformulare (oder eingebettete Formulare auf der Vereinsseite) mit den Feldern, die ihr braucht.
+Kontakt ohne Keycloak: Zammad-Webformulare (oder eingebettet auf der Vereinsseite) mit den Feldern, die ihr braucht. **Nicht** der Aufnahmeantrag.
 
 Mehrere Formulare, jedes fest an eine **Gruppe**:
 
 - Support
-- Vorstand
+- Vorstand (Kontakt, keine Aufnahme-UI)
 - Präventionsbeauftragte
-- Mitgliedschaft / Aufnahme
 - je Zweigverein, wenn nötig
 
 Die anfragende Person klickt zusammen, was ihr anbietet (Verein, Thema, Text, Anhang). Es wird ein Ticket in der richtigen Queue. Antwort per Mail an die angegebene Adresse, ohne Element.
@@ -26,7 +27,7 @@ Queue, Nummer, Filter, Suche, Zuweisung, Anhänge: fertig in Zammad. OIDC für A
 
 ## Amtsaufgaben
 
-Zammad kann das über **Ticket-Vorlagen / Makros / Checklisten**, nicht über ein zweites Aufgabenprodukt.
+Zammad-**Vorlagen / Makros / Checklisten** nur intern (Amt), nicht für die Straße.
 
 Beispiel: neuer Vorstand → Makro oder Portal-Knopf (dünner API-Aufruf) legt ein Ticket mit Checkliste an:
 
@@ -38,7 +39,9 @@ Beispiel: neuer Vorstand → Makro oder Portal-Knopf (dünner API-Aufruf) legt e
 
 Zuweisung an die Person oder an die Zammad-Gruppe „Vorstand Wanne-Eickel“. Ergebnis (PDF, Termin) darf in Nextcloud landen; der Auftrag bleibt das Zammad-Ticket.
 
-Der einzige eigene Code: optional Portal ruft Zammad-API auf, wenn eine Keycloak-Gruppe „Vorstand“ neu ist. Die Queue selbst ist Zammad.
+Optional: nach Portal-Aufnahmeantrag ein **internes** Ticket „Antrag prüfen“ in der Vorstands-Queue. Die antragstellende Person arbeitet nicht in Zammad.
+
+Der einzige eigene Code: optional Portal ruft Zammad-API auf (neues Amt, neuer Antrag). Die Queue selbst ist Zammad.
 
 ## Betrieb
 

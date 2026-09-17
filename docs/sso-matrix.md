@@ -2,7 +2,7 @@
 
 ## Was SSO von allein kann
 
-Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, Synapse (bzw. MAS), **Zammad** und **Moodle** sind OIDC-Clients desselben Realms.
+Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, Synapse (bzw. MAS), **Zammad** und **Frappe Learning** sind OIDC-Clients desselben Realms.
 
 Ablauf:
 
@@ -11,7 +11,7 @@ Ablauf:
 3. Ein Groups-Mapper legt Gruppen in Token bzw. Userinfo.
 4. CAV und Portal lesen die Claims: Tenant aus `verein:*`, Mitgliedschaftsstatus aus `mitgliedschaft:*`, Berechtigung aus `rolle:*` bzw. `backoffice`.
 5. Der Nextcloud-Client ist auf Amts-/Dienstgruppen begrenzt. `mitgliedschaft:pending` und `:beendet` bekommen kein Nextcloud-Konto.
-6. Zammad: eingeloggte User (auch pending/beendet) als Kunden; Moodle nur `mitgliedschaft:aktiv`. Agenten nach `rolle:*`.
+6. Zammad: eingeloggte User (auch pending/beendet) als Kunden; LMS nur `mitgliedschaft:aktiv`. Agenten nach `rolle:*`. Matrix-Join zusätzlich `schulung:chat`.
 
 Gleiches Login heißt nicht gleiche Sicht. Nextcloud bleibt vom Mitgliederbereich getrennt.
 
@@ -27,7 +27,7 @@ OIDC ist nur die Anmeldung (wer ist das). **Berechtigung** (was darf die Person)
 
 Keycloak Authorization Services (UMA, Policies pro Resource) nicht nutzen. Zu komplex für den Solo-Betrieb; CAV prüft Objekt-Rechte selbst, Rollen kommen aus dem Token.
 
-Nextcloud, Zammad, Moodle: jeweilige IdP-/Group-Mapper auf dieselben Gruppennamen. Matrix: nicht nativ, eigener Abgleich (unten).
+Nextcloud, Zammad, Frappe Learning: jeweilige IdP-/Group-Mapper auf dieselben Gruppennamen. Matrix: nicht nativ, eigener Abgleich (unten).
 
 ## Was SSO nicht kann
 
@@ -39,15 +39,16 @@ Die Kanalliste in Element ist die Menge der Räume, in denen das Matrix-Konto Mi
 
 Gruppen in Keycloak, nicht in Nextcloud oder Matrix als führendes System.
 
-Drei Achsen, kein Kreuzprodukt:
+Vier Achsen, kein Kreuzprodukt:
 
 | Achse | Anzahl | Beispiel | Bedeutung |
 | --- | --- | --- | --- |
 | Organisation | 1 Gruppe pro Zweigverein (+ optional Bundesland) | `verein:wanne-eickel`, `bundesland:nrw` | wo die Person zugeordnet ist |
 | Mitgliedschaft | genau eine | `mitgliedschaft:pending`, `mitgliedschaft:aktiv`, `mitgliedschaft:beendet` | ob Login-Fachzugriff Mitglied ist |
 | Funktion | festes Set | `rolle:vorstand`, `rolle:ap`, `rolle:praevb`, `rolle:ausgabe`, `rolle:anbau`, `backoffice` | Amt und Dienst |
+| Schulung | 0..n | `schulung:onboarding`, `schulung:praevention`, `schulung:chat`, `schulung:ausgabe` | LMS-Abschluss; CAV schreibt die Gruppe |
 
-Bei 180 Zweigvereinen: 180 `verein:*` plus Status- und Funktionsset, nicht 180×Rollen. Ausgabe in Wanne-Eickel = `verein:wanne-eickel` **und** `rolle:ausgabe`. PräVB analog: `verein:wanne-eickel` **und** `rolle:praevb`.
+Bei 180 Zweigvereinen: 180 `verein:*` plus Status-, Funktions- und Schulungsset, nicht 180×Rollen. Ausgabe in Wanne-Eickel = `verein:wanne-eickel` **und** `rolle:ausgabe`. PräVB analog: `verein:wanne-eickel` **und** `rolle:praevb`.
 
 Keine Gruppen `verein:<slug>:mitglied` / `verein:<slug>:vorstand`. Tenant im CAV kommt aus genau einer `verein:*`-Gruppe. KCanG-Mitgliedschaft in mehr als einem Anbauverein ist rechtlich eingeschränkt; der Fachkern prüft das, nicht Keycloak. Backoffice sieht Mandanten in der CAV-UI über `backoffice`, nicht über 180 Vereinsgruppen.
 
@@ -55,7 +56,7 @@ Keine Gruppen `verein:<slug>:mitglied` / `verein:<slug>:vorstand`. Tenant im CAV
 
 ### Mitgliedschaftsstatus
 
-Genau eine der drei Gruppen. Keycloak-User bleibt `enabled`, solange ein Login gewünscht ist. Statuswechsel macht die CAV-API (Gruppen tauschen), nicht die Admin-Konsole.
+Genau eine der drei Gruppen. Keycloak-User bleibt `enabled`, solange ein Login gewünscht ist. Statuswechsel und Schulungsabschlüsse macht die CAV-API (Gruppen tauschen), nicht die Admin-Konsole.
 
 | Gruppe | Bedeutung | Konto |
 | --- | --- | --- |
@@ -65,15 +66,15 @@ Genau eine der drei Gruppen. Keycloak-User bleibt `enabled`, solange ein Login g
 
 Konto existiert also schon im Antrag, nicht erst nach Handanlage. Amt gibt frei oder lehnt ab — keine Abschrift der Stammdaten.
 
-- **pending:** Portal (Antragsstatus), Zammad als Kunde. Keine CAV-Abgabe, kein Mitglieder-Matrix, kein Moodle-Pflichtkurs, kein Nextcloud. Zählt nicht gegen 500.
-- **aktiv:** voller Mitgliederzugang laut Tabellen unten.
+- **pending:** Portal (Antragsstatus), Zammad als Kunde. Keine CAV-Abgabe, kein Mitglieder-Matrix, kein LMS, kein Nextcloud. Zählt nicht gegen 500.
+- **aktiv:** LMS erlaubt; Chat, Abgabe und CAV-Alltag erst mit den jeweiligen `schulung:*` (siehe [schulungen.md](schulungen.md)).
 - **beendet:** Portal (Belege, Beitragshistorie), Zammad-Tickets. Keine Abgabe, Matrix-Kick aus Mitglieder-Spaces, Amts-`rolle:*` entfernen. 500er frei.
 - **Ablehnung** eines Antrags: nicht `beendet`. User `enabled=false` oder löschen.
 - **Konto löschen** (Selbstbedienung im Portal): Keycloak-Login beenden (`enabled=false` oder User löschen). CAV-Fachdaten (Abgabe, Beitrag, § 26) bleiben die gesetzliche Aufbewahrung; das ist kein vollständiges Löschen der Vereinsakte.
 
-CAV bleibt System of Record für den Status; Keycloak spiegelt ihn für Token und andere Apps.
+CAV bleibt System of Record für Status und Schulungsnachweis; Keycloak spiegelt beides für Token und andere Apps. `schulung:*` setzt nur der CAV nach LMS-Abschluss, nicht die Admin-Konsole.
 
-Funktionsgruppen (ein Präfix `rolle:`, keine `amt:*`-Duplikate):
+Gruppen (Präfixe `mitgliedschaft:`, `verein:`, `rolle:`, `schulung:`; keine `amt:*`-Duplikate):
 
 | Keycloak-Gruppe | Art | Bedeutung |
 | --- | --- | --- |
@@ -88,20 +89,25 @@ Funktionsgruppen (ein Präfix `rolle:`, keine `amt:*`-Duplikate):
 | `rolle:ausgabe` | Dienst | Ausgabe; CAV-Abgabe, mehrere Personen pro Verein |
 | `rolle:anbau` | Dienst | Anbauteam |
 | `backoffice` | Dienst | Gesamtverein-Mitarbeiter |
+| `schulung:onboarding` | Nachweis | Onboarding bestanden |
+| `schulung:praevention` | Nachweis | Prävention / Jahreskurs |
+| `schulung:chat` | Nachweis | Chat-Regeln; Voraussetzung Matrix |
+| `schulung:ausgabe` | Nachweis | Ausgabeschulung; zusätzlich zu `rolle:ausgabe` |
 
 Vorstand, AP, PräVB sind satzungsgemäße bzw. KCanG-Ämter (oft wenige Personen). Ausgabe ist ebenfalls eine **Rolle**, aber betrieblich: Schichtpersonal, das abgibt — nicht 180 Gruppen, eine globale `rolle:ausgabe`. Wer beides ist (Vorstand, der auch ausgibt), bekommt beide Funktionsgruppen.
 
 ## Matrix-Spaces zum selben Beispiel
 
-Ableitung: Mitglieder-Spaces nur bei `mitgliedschaft:aktiv`. `pending` und `beendet` nicht in Vereins-Spaces.
+Ableitung: Mitglieder-Spaces nur bei `mitgliedschaft:aktiv` **und** `schulung:chat`. `pending` und `beendet` nicht in Vereins-Spaces. Ohne Chat-Schulung kein Element, auch wenn der Status schon aktiv ist.
 
 | Bedingung | Matrix | Nextcloud |
 | --- | --- | --- |
 | `mitgliedschaft:pending` | kein Mitglieder-Space | kein Konto |
-| `mitgliedschaft:aktiv` | Space Gesamtverein: Ankündigungen, Hilfe, Regeln | kein Konto |
+| `mitgliedschaft:aktiv` ohne `schulung:chat` | kein Join | kein Konto |
+| `mitgliedschaft:aktiv` und `schulung:chat` | Space Gesamtverein: Ankündigungen, Hilfe, Regeln | kein Konto |
 | `mitgliedschaft:beendet` | Kick aus Mitglieder-Spaces | kein Konto |
-| `bundesland:nrw` (und aktiv) | Space NRW | kein Konto |
-| `verein:wanne-eickel` (und aktiv) | Space Wanne-Eickel: Ort, Termine, Vereinschat | kein Konto |
+| `bundesland:nrw` (aktiv + `schulung:chat`) | Space NRW | kein Konto |
+| `verein:wanne-eickel` (aktiv + `schulung:chat`) | Space Wanne-Eickel: Ort, Termine, Vereinschat | kein Konto |
 | zusätzlich `rolle:vorstand` | Space Vorstand Wanne-Eickel | Konto, Group Folder, Kalender |
 | zusätzlich `rolle:ap` | Dienstraum Ansprechpartner | Konto, Amt-Ordner |
 | zusätzlich `rolle:praevb` | Dienstraum Prävention | Konto, Amt-Ordner |
@@ -120,7 +126,7 @@ Nach Login und zusätzlich periodisch:
 3. Synapse-Admin-API: fehlende Memberships joinen.
 4. Bei Gruppenverlust kicken (Austritt Wanne-Eickel → Space Wanne-Eickel verlassen).
 
-CAV verweigert Abgabe, sobald `mitgliedschaft:aktiv` fehlt. Matrix folgt erst, wenn der Abgleich gelaufen ist. Deshalb den Abgleich direkt nach Login und nach Statuswechsel anstoßen, nicht nur nachts.
+CAV verweigert Abgabe, sobald `mitgliedschaft:aktiv` oder die vom Verein geforderte `schulung:praevention` fehlt. Matrix folgt erst, wenn `schulung:chat` da ist und der Abgleich gelaufen ist. Abgleich direkt nach Login, nach Statuswechsel und nach Schulungsabschluss anstoßen, nicht nur nachts.
 
 Element Server Suite „Group Sync“ wäre die Kaufvariante. Für den Solo-Betrieb ist ein eigener, lesbarer Worker vorgesehen.
 
@@ -129,10 +135,11 @@ Element Server Suite „Group Sync“ wäre die Kaufvariante. Für den Solo-Betr
 Mitglied Wanne-Eickel:
 
 1. Login Keycloak
-2. Portal: Belege, CAV, Chat, Support, Schulungen
-3. Element: Gesamtverein + NRW + Wanne-Eickel
-4. Zammad: eigene Tickets; Moodle: Jahresschulung
-5. CAV nur Tenant Wanne-Eickel
-6. kein `cloud.example`
+2. Portal: Belege, CAV, Support, Schulungen; Chat-Link erst mit `schulung:chat`
+3. LMS: Onboarding, Prävention, Chat-Regeln
+4. Element (nach Chat-Kurs): Gesamtverein + NRW + Wanne-Eickel
+5. Zammad: eigene Tickets
+6. CAV nur Tenant Wanne-Eickel; Abgabe nach Präventionskurs
+7. kein `cloud.example`
 
-Vorstand: dasselbe plus Vorstands-Space, Zammad als Agent, Nextcloud, Amtskurse in Moodle.
+Vorstand: dasselbe plus Vorstands-Space, Zammad als Agent, Nextcloud, Amtskurse im LMS.

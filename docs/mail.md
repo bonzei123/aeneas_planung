@@ -17,25 +17,27 @@ Ausgang (SMTP), damit Systeme Leute erreichen, die gerade nicht in Element sind:
 
 - Keycloak: Passwort vergessen, Bestätigung
 - Zammad: Ticket-Antwort nach außen
-- Moodle: Kurserinnerung, wenn gewünscht
+- Frappe Learning: Kurserinnerung, wenn gewünscht
 - Zahlungsdienst / Portal: Einzug fehlgeschlagen, SEPA-Vorabankündigung
 
 Eingang (IMAP in Zammad), damit die Öffentlichkeit und Mitglieder ohne Login schreiben können, ohne private Vorstands-Mails zu kennen.
 
-Kein Chat, keine Mitgliederversammlung im Mailprogramm. Sobald jemand Mitglied mit Konto ist: Matrix und Zammad im Browser.
+Kein Chat, keine Mitgliederversammlung im Mailprogramm. Sobald jemand Mitglied mit Konto ist: Portal und Zammad im Browser; Matrix erst nach Chat-Schulung.
 
 ## Wer noch kein Mitglied ist
 
 Personen mit Amt müssen erreichbar sein, ohne ihre Privatadresse zu veröffentlichen. Der Weg ist **Zammad**, nicht Element (dafür braucht man schon ein Konto) und nicht die Handynummer auf der Website.
 
-Zwei Eingänge, beide landen in derselben Queue:
+Zwei Eingänge für **Kontakt**, beide landen in derselben Queue — der Aufnahmeantrag ist kein Zammad-Formular:
 
-1. **Öffentliches Formular** auf der Vereinswebsite / am Portal ohne Login („Kontakt Vorstand“, „Mitglied werden“, „Frage an den Verein“). Zammad legt ein Ticket an, Gruppe z. B. Vorstand Wanne-Eickel oder Gesamtverein-Info.
+1. **Öffentliches Kontaktformular** auf der Vereinswebsite / am Portal ohne Login („Kontakt Vorstand“, „Frage an den Verein“). Zammad legt ein Ticket an, Gruppe z. B. Vorstand Wanne-Eickel oder Gesamtverein-Info.
 2. **Funktionspostfächer beim Mailanbieter**, die Zammad abholt, z. B. `info@…`, `vorstand@wanne-eickel.…`. Antwort geht über SMTP vom Verein, Absender die Funktionsadresse.
 
-Der Vorstand arbeitet das Ticket als Agent ab. Die Außenstehende sieht E-Mail oder das Ticket-Portal von Zammad, nicht Matrix. Private Gmail/Telefonticker der Gewählten bleiben intern.
+**Mitglied werden:** eigenes gebrandetes Portal-Formular (wenige Felder, klare Sprache). CAV-Antrag + Keycloak `mitgliedschaft:pending`. Optional intern ein Zammad-Ticket für den Vorstand; die Person sieht keine Ticketmaske.
 
-Nach dem Absenden des Aufnahmeformulars: Keycloak-Konto mit `mitgliedschaft:pending`, dann Matrix erst nach Wechsel auf `aktiv`.
+Der Vorstand arbeitet Kontakt-Tickets als Agent ab. Die Außenstehende sieht E-Mail oder das Zammad-Kundenportal, nicht Matrix. Private Gmail/Telefonticker der Gewählten bleiben intern.
+
+Nach Zusage: `mitgliedschaft:aktiv`. LMS (Onboarding, Prävention, Chat-Regeln). Matrix erst mit `schulung:chat`.
 
 Impressum und Satzung brauchen eine Kontaktmöglichkeit — Formular plus eine Funktionsmail reichen, ein eigener Mailserver nicht.
 
