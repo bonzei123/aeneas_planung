@@ -22,8 +22,8 @@ Kein React-SPA am Anfang. Kein Ticketkern, kein LMS im Portal — nur Links, Auf
 
 | Modul | Inhalt | Reihenfolge |
 | --- | --- | --- |
-| Mandant / Verein | `verein_id`, Erlaubnisbezug, 500er-Deckel | 1 |
-| Mitglieder | Alter, Status, Rollen, Token-Gruppen | 1 |
+| Mandant / Verein | `verein_id`, Erlaubnisbezug, 500er-Deckel; Tenant-Paket raus/rein | 1 |
+| Mitglieder | Alter, Status, Rollen, Token-Gruppen; Schlüssel `mitglied_id` | 1 |
 | Schulungsnachweis | Kurs, Zeitstempel, spiegelt `schulung:*` nach Keycloak | 1 |
 | Beitrag / Tokens | Soll, Gutschrift, Beleg; Einzug über Zahlungsdienst | 2 |
 | Chargen / Track & Trace | Samen bis Packung, Bestand in Gramm | 3 |
@@ -62,6 +62,7 @@ Abgabe ist Weitergabe an Mitglieder (Selbstkosten), kein Shop. Zahlungsdienst zi
 - CAV / Portal → Zahlungsdienst: Mandat, 10-€-Abo, Einzahlung, Webhook → Tokens.
 - CAV ↛ Nextcloud für Mitgliederakten.
 - Zammad/LMS ↛ Bestände, Limits, Behördenexport.
+- Tenant-Paket: CAV + Keycloak-User (per E-Mail) + NC-Folder + Zammad-Tickets der Organisation; Matrix-Historie nicht. [mandanten.md](mandanten.md).
 
 ## Haftung (kurz)
 

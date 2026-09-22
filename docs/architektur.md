@@ -93,9 +93,11 @@ Zahlungsdienst: [beitrag-sepa.md](beitrag-sepa.md). Tickets: [tickets.md](ticket
 
 ## Mandanten
 
-Ein CAV-Prozess, viele Zweigvereine, jede fachliche Zeile mit `verein_id`. Zammad-Organisationen spiegeln denselben Verein, führend bleibt Keycloak. LMS eine Instanz, keine 180 Schulungsplattformen.
+Ein CAV-Prozess, viele Zweigvereine **oder** genau einer — dieselbe YAML. Jede fachliche Zeile mit `verein_id`. Zammad-Organisationen spiegeln denselben Verein, führend bleibt Keycloak. LMS eine Instanz, keine 180 Schulungsplattformen.
 
 Jedes Zweigverein ist rechtlich eigene Anbauvereinigung (Erlaubnis, 500er-Grenze, Bestand, Jahresmeldung). Keine Bestandsvermischung.
+
+Ausgliedern und Wiederbeitritt: Datenpaket, [mandanten.md](mandanten.md). Kein zweites Produkt „Aeneas Solo“.
 
 ## Frontends
 

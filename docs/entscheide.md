@@ -12,11 +12,13 @@ cannaUNITY ist höchstens Ideenquelle für Track & Trace. Der Code wird nicht ü
 
 Betrieb: **Docker Compose**, ggf. mehrere VMs, kein Kubernetes. GitHub: Infra-Compose plus Portal/CAV — nicht ein Repo pro Upstream-Produkt. [repos-und-docker.md](repos-und-docker.md).
 
+**Mandanten:** dieselbe Software allein oder unter dem Gesamtverein. Ausgliedern und Beitritt über ein Tenant-Paket, nicht über einen zweiten Codepfad. [mandanten.md](mandanten.md).
+
 ## Schichten
 
 1. **Identität und RBAC:** Keycloak (ein Realm, viele OIDC-Clients). Gruppen im Token sind die Berechtigung; Katalog [sso-matrix.md](sso-matrix.md). Mitgliedschaftsstatus genau einer von `pending` / `aktiv` / `beendet`; Login unabhängig von der Abgabe. Dienst-Türen zusätzlich über `schulung:*` (Abschluss im LMS, geschrieben vom CAV).
 2. **Fertige Apps (Kern):** Matrix/Element (Chat), Zammad (Tickets), Frappe Learning (Schulung), Nextcloud+Collabora (nur Backoffice).
-3. **Eigener Fachkern:** FastAPI Portal + CAV-Mandanten, PostgreSQL.
+3. **Eigener Fachkern:** FastAPI Portal + CAV-Mandanten, PostgreSQL. Person = `mitglied_id`, nicht Keycloak-`sub` (sonst stirbt der Reimport).
 4. **Optional:** Compose-Overlays hinter demselben Keycloak, [optionale-module.md](optionale-module.md). Nicht im Kern-Compose.
 
 ## Nextcloud

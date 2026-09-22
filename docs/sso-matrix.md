@@ -52,6 +52,8 @@ Bei 180 Zweigvereinen: 180 `verein:*` plus Status-, Funktions- und Schulungsset,
 
 Keine Gruppen `verein:<slug>:mitglied` / `verein:<slug>:vorstand`. Tenant im CAV kommt aus genau einer `verein:*`-Gruppe. KCanG-Mitgliedschaft in mehr als einem Anbauverein ist rechtlich eingeschränkt; der Fachkern prüft das, nicht Keycloak. Backoffice sieht Mandanten in der CAV-UI über `backoffice`, nicht über 180 Vereinsgruppen.
 
+CAV speichert Personen als `mitglied_id`. Keycloak-`sub` nur Spiegel — beim Ausgliedern gibt es ein neues Realm, der `sub` wechselt, die E-Mail bleibt der Join-Schlüssel. [mandanten.md](mandanten.md).
+
 `verein:*`-Gruppen später aus dem CAV-Mandantenstamm erzeugen oder importieren, nicht 180-mal per Hand in der Admin-Konsole.
 
 ### Mitgliedschaftsstatus

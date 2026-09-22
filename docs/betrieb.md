@@ -22,6 +22,8 @@ Derselbe Compose (Keycloak, Portal, CAV, Zammad, Frappe, Matrix, Nextcloud). Kei
 
 Kein Business-Silber, keine 30 Postfächer. Overlays (Jitsi, Wiki) erst, wenn RAM-Kopf bleibt. Zahlungsdienst (Lastschrift ~0,35 €/Einzug) ist **kein** Serverpreis — bei 500×10 € Lastschrift eher der teurere Posten.
 
+Ausgliedern auf einen eigenen Host: dieselbe 32-GB-Klasse plus Tenant-Paket, [mandanten.md](mandanten.md).
+
 Skalierung auf viele Vereine: unten, nicht diese Kiste tauschen.
 
 ## 15.000–20.000 Konten, bis ~180 Vereine

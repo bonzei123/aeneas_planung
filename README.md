@@ -6,7 +6,7 @@ Hier liegt die Architektur, nicht der Anwendungscode. Selbst geschrieben werden 
 
 ## Zielbild in einem Satz
 
-Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beitrag) im CAV-Kern. Chat in Matrix, Support in Zammad, Schulung in Frappe Learning (nicht Moodle), Office nur für Ämter in Nextcloud. Dienste wie Chat gehen erst nach bestandener Schulung auf. Extra-Module nur als Overlay, nicht im Kern-Compose.
+Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beitrag) im CAV-Kern. Chat in Matrix, Support in Zammad, Schulung in Frappe Learning (nicht Moodle), Office nur für Ämter in Nextcloud. Dieselbe Landschaft als **ein Verein allein** oder als **Gesamtverein**; Zweige können mit Datenpaket raus und wieder rein. Extra-Module nur als Overlay, nicht im Kern-Compose.
 
 ## Dokumente
 
@@ -16,6 +16,7 @@ Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beit
 | [docs/architektur.md](docs/architektur.md) | Hosts, Compose, Flussbild |
 | [docs/sso-matrix.md](docs/sso-matrix.md) | SSO, Keycloak-Gruppen, Matrix-Spaces |
 | [docs/fachkern.md](docs/fachkern.md) | Portal, CAV, Schnittstellen |
+| [docs/mandanten.md](docs/mandanten.md) | Allein / Gesamtverein, ausgliedern, reimportieren |
 | [docs/beitrag-sepa.md](docs/beitrag-sepa.md) | Tokens, Lastschrift, Einzahlung |
 | [docs/tickets.md](docs/tickets.md) | Zammad |
 | [docs/schulungen.md](docs/schulungen.md) | Frappe Learning, Mitwirkung, Dienst-Türen |
