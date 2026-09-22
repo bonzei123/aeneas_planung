@@ -4,7 +4,7 @@
 
 Ja, für diese Landschaft und einen Solo-Betrieb. Kubernetes ist kein Ziel. Alles außer Portal und CAV-Kern sind **offizielle Images**; ihr schreibt Compose-Dateien und Konfiguration, nicht Keycloak oder Zammad neu.
 
-Compose kommt mit der **Stückzahl der Container** klar. Was kippt, ist ein zu kleiner einzelner Server (RAM: Synapse, Zammad inkl. Suche, Nextcloud, Collabora, Postgres). Frappe Learning ist kein Moodle-Brocken. Nicht die YAML.
+Compose kommt mit der **Stückzahl der Container** klar. Was kippt, ist ein zu kleiner einzelner Server (RAM: Synapse, Zammad inkl. Suche, Nextcloud, Collabora, Postgres). Frappe Learning ist MariaDB+Worker, kein Moodle-Brocken. Optionale Overlays zählen extra RAM, nicht extra Repos. Nicht die YAML.
 
 Praktisch:
 
@@ -16,7 +16,9 @@ Offizielle Compose-Vorlagen von Zammad, Nextcloud, Keycloak als Ausgang, an eure
 
 ## Eigene Repos — nicht pro Produkt
 
-**Nein:** kein `aeneas_keycloak`, `aeneas_zammad`, `aeneas_frappe`, `aeneas_moodle`, `aeneas_nextcloud`. Das wären Forks fremder Software. Updates würden euch erschlagen, und ihr pflegt nichts, was ihr nicht geschrieben habt.
+**Nein:** kein `aeneas_keycloak`, `aeneas_zammad`, `aeneas_frappe`, `aeneas_moodle`, `aeneas_nextcloud`, `aeneas_bookstack`. Das wären Forks fremder Software. Updates würden euch erschlagen, und ihr pflegt nichts, was ihr nicht geschrieben habt.
+
+Optionale Module: weitere Compose-Dateien in `aeneas_infra` (`compose.wiki.yml`, `compose.jitsi.yml`, …), kein fünftes Produkt-Repo.
 
 | Repo | Inhalt |
 | --- | --- |

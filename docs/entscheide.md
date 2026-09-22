@@ -15,12 +15,15 @@ Betrieb: **Docker Compose**, ggf. mehrere VMs, kein Kubernetes. GitHub: Infra-Co
 ## Schichten
 
 1. **Identität und RBAC:** Keycloak (ein Realm, viele OIDC-Clients). Gruppen im Token sind die Berechtigung; Katalog [sso-matrix.md](sso-matrix.md). Mitgliedschaftsstatus genau einer von `pending` / `aktiv` / `beendet`; Login unabhängig von der Abgabe. Dienst-Türen zusätzlich über `schulung:*` (Abschluss im LMS, geschrieben vom CAV).
-2. **Fertige Apps:** Matrix/Element (Chat), Zammad (Tickets), Frappe Learning (Schulung), Nextcloud+Collabora (nur Backoffice).
+2. **Fertige Apps (Kern):** Matrix/Element (Chat), Zammad (Tickets), Frappe Learning (Schulung), Nextcloud+Collabora (nur Backoffice).
 3. **Eigener Fachkern:** FastAPI Portal + CAV-Mandanten, PostgreSQL.
+4. **Optional:** Compose-Overlays hinter demselben Keycloak, [optionale-module.md](optionale-module.md). Nicht im Kern-Compose.
 
 ## Nextcloud
 
 Nur Backoffice (Vorstand, AP, PräVB, Ausgabe, Anbau, Gesamtverein). Mitglieder bekommen kein Nextcloud-Konto. Belege im Portal.
+
+**Ablage mit Rechten:** nur Nextcloud Group Folders. Kein Paperless, kein Alfresco. Flow/Approval nur Datei-Freigabe, kein Rechnungs-BPM — das ist Zammad plus später DATEV/Lexoffice.
 
 ## Matrix
 
@@ -40,15 +43,31 @@ Hunderte Tickets pro Monat: **Zammad**, OIDC, kein eigenes Helpdesk, kein Nextcl
 
 ## Schulung: Frappe Learning
 
-Kein Moodle (zu schwer). **Frappe Learning**, nicht ERPNext. Kurse für Onboarding, Prävention, interne und Amts-Schulungen; Mitwirkungsnachweis. Abschlüsse steuern Türen (Chat, Abgabe, …) über CAV → Keycloak-Gruppen `schulung:*`. [schulungen.md](schulungen.md).
+Kein Moodle: Campus-Stack, PHP-FPM, Plugin-Zoo, eigene VM schon bei mäßiger Last — ungeeignet für Onboarding/Prävention/Quiz. **Frappe Learning** (AGPL, MariaDB+Redis+App/Worker), nicht ERPNext. Kurse für Onboarding, Prävention, interne und Amts-Schulungen; Mitwirkungsnachweis. Abschlüsse steuern Türen (Chat, Abgabe, …) über CAV → Keycloak-Gruppen `schulung:*`. [schulungen.md](schulungen.md).
 
 ## Mail
 
 Kein eigener Mailserver. Intern: Matrix, Zammad, Nextcloud, Portal. Nach außen und für Passwortreset: Postfächer plus SMTP beim Anbieter. Nichtmitglieder erreichen Ämter über Zammad-Formular oder Funktionsmail, nicht über private Adressen. Aufnahme: gebrandetes Portal-Formular, nicht Zammad-Ticketmaske. [mail.md](mail.md).
 
+## Optionale Module
+
+Nicht jeder Verein braucht dasselbe. Overlay, gleicher Realm, Portal zeigt nur eingeschaltete Links.
+
+| Wunsch | Festlegung |
+| --- | --- |
+| Wiki / Handbuch | optional **BookStack**; FAQs zuerst Zammad-KB, Pflichtstoff im LMS |
+| Git für Mitglieder | **nein**; Code auf GitHub, Satzung im Wiki/Nextcloud |
+| DMS | nur **Nextcloud**; Paperless nicht |
+| Eingangsrechnungen | **Zammad + Nextcloud**; buchen DATEV/Lexoffice; kein FOSS-ERP |
+| Video | optional **Jitsi**, kein BBB |
+| Newsletter | optional **Listmonk** |
+| Amts-Passwörter | optional **Vaultwarden** |
+
+[optionale-module.md](optionale-module.md).
+
 ## ERPNext
 
-Nein als Portal oder Fachkern. Buchhaltung später DATEV/Lexoffice. Frappe Learning nutzt dasselbe Framework, ist aber nur das LMS.
+Nein als Portal, Fachkern oder Rechnungsbuch. Buchhaltung später DATEV/Lexoffice. Eingangsrechnungen: Zammad plus Nextcloud, [tickets.md](tickets.md). Frappe Learning nutzt dasselbe Framework, ist aber nur das LMS.
 
 ## OpenDesk
 
@@ -60,4 +79,4 @@ Alles Web-seitig brandbar (Logo, Name, Farben), mit Abstufungen. Matrix hat kein
 
 ## Code, den niemand erklärt
 
-Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Frappe Learning, Nextcloud, Traefik, Postgres, MariaDB (LMS), Zahlungsdienst.
+Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Frappe Learning, Nextcloud, Traefik, Postgres, MariaDB (LMS), Zahlungsdienst. Optional dazu: BookStack, Jitsi, Listmonk, Vaultwarden — nur Images und Compose, kein Fork.

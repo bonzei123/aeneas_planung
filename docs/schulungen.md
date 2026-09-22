@@ -1,14 +1,16 @@
 # Schulungen und Mitwirkung
 
-Kein eigenes LMS. **Frappe Learning** (AGPL, Frappe-Framework) mit Keycloak-OIDC. Schlanker als Moodle: Kurse, Quiz, Abschluss, Branding, API. Nicht ERPNext — das bleibt als Portal/Fachkern ausgeschlossen.
+Kein eigenes LMS. **Frappe Learning** (AGPL, Frappe-Framework) mit Keycloak-OIDC. Nicht ERPNext — das bleibt als Portal/Fachkern ausgeschlossen.
 
 Zweck: Mitglieder **nehmen teil** (Mitwirkung, Prävention). Abschlüsse sind der Nachweis. Daran hängen **Türen zu anderen Diensten** (z. B. Chat-Regeln bestanden → Matrix). Das LMS ist Inhalt und Test; es schaltet nichts selbst frei.
 
-## Warum nicht Moodle
+## Warum Frappe, nicht Moodle
 
-Moodle kann Completion, ist für Uni-Campus gebaut und RAM-hungrig (eigene VM schon bei mäßiger Last). Forma LMS: OIDC nur als Kauf-Plugin. LearnHouse: SSO und White-Label Enterprise. ILIAS/OpenOLAT: deutsch, nicht schlanker.
+Moodle ist ein Uni-Campus: PHP-FPM, riesiger Plugin-Zoo, moodledata, oft eigene VM schon bei wenigen hundert gleichzeitigen Lernern. Für Onboarding, Prävention und ein Pflichtquiz ist das unperformant und betrieblich zu teuer — derselbe Grund, aus dem GitLab und BigBlueButton draußen bleiben.
 
-Fallback, falls Frappe-UI nicht tragbar auf Deutsch ist: **Chamilo** (GPL, OIDC-Plugin). Dieselbe Rolle, gleicher Anschluss über CAV.
+Frappe Learning: Kurse, Quiz, Abschluss, Branding, REST/Webhook. Stack ist MariaDB + Redis + App/Worker, Compose-Overlay, Image pinnen. Immer noch ein Framework, aber kein Campus-LMS.
+
+Nicht: Forma (OIDC nur Kauf-Plugin), LearnHouse (SSO/White-Label Enterprise), ILIAS/OpenOLAT (deutsch, nicht schlanker). Fallback, falls die Frappe-UI auf Deutsch nicht tragbar ist: **Chamilo** (GPL, OIDC-Plugin). Dieselbe Rolle, gleicher Anschluss über CAV.
 
 ## Was das LMS liefert
 
@@ -20,7 +22,7 @@ Fallback, falls Frappe-UI nicht tragbar auf Deutsch ist: **Chamilo** (GPL, OIDC-
 
 Nicht: Rechte für Matrix, CAV oder Nextcloud. Nicht: zweites Mitgliederverzeichnis.
 
-Portal: Link „Schulungen“. Mein Konto zeigt grob offen / bestanden — Quelle ist der **CAV** (Spiegel der Abschlüsse), nicht die LMS-Oberfläche als SoR.
+Portal: Link „Schulungen“. Mein Konto zeigt grob offen / bestanden — Quelle ist der **CAV** (Spiegel der Abschlüsse), nicht die LMS-Oberfläche als SoR. Lebende Handbücher ohne Quiz: optionales Wiki, nicht das LMS ([optionale-module.md](optionale-module.md)).
 
 ## Türen (CAV + Keycloak)
 
@@ -44,7 +46,7 @@ Ob ein Jahreskurs vor Satzung und KCanG als Mitwirkung gilt, ist **Vereinsbeschl
 
 Host `learn.example`. Frappe: typisch MariaDB + Redis + App/Worker, Docker-Overlay in `aeneas_infra`, Image pinnen. OIDC-Client im Realm `aeneas` für `mitgliedschaft:aktiv`. Eine Instanz für alle Zweigvereine, Kurse global oder per Gruppe — nicht 180 LMS.
 
-Backup: Datenbank plus Dateispeicher der Kurse. Kein moodle.org-Netz, kein Frappe-Cloud-Zwang.
+Backup: Datenbank plus Dateispeicher der Kurse. Kein moodle.org-Netz, kein Frappe-Cloud-Zwang. Moodle-Plugins und moodledata gehören nicht in diese Landschaft.
 
 ## Anschluss
 

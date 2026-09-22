@@ -17,6 +17,7 @@ Zentrale Dateien (Logo, Farbe, Schrift) einmal festlegen und in jedes Produkt ü
 | Zammad | Name, Logo, CSS | entfällt (Browser) |
 | Frappe Learning | Name, Logo, Farben in Settings | entfällt (Browser) |
 | Nextcloud | Theming-App (Name, Logo, Farbe) | offizielle Clients oder GmbH-Branding |
+| BookStack / Jitsi | jeweiliges Theming, soweit vorhanden | entfällt |
 
 ## Keycloak
 
@@ -52,7 +53,7 @@ Ja, ohne Fork. Unter Einstellungen → Branding: **Produktname**, **Logo** (Logi
 
 Ja, ohne Moodle-Theme-Ballast. Unter Settings → Branding: Name, Logo, Favicon, Farben. Login über Keycloak, also dasselbe Login-Theme wie der Rest.
 
-Keine Store-App. Start: Browser, gebrandet. Kurse sollen nach Verein aussehen, nicht nach „Frappe“.
+Keine Store-App. Start: Browser, gebrandet. Kurse sollen nach Verein aussehen, nicht nach „Frappe“. Moodle-Themes und Plugin-Stores entfallen mit dem Produkt.
 
 ## Nextcloud
 
@@ -62,8 +63,10 @@ Desktop- und Handy-Clients aus den Stores heißen **Nextcloud**. Fertig gebrande
 
 Collabora: nur schwach thembar; im iFrame der Cloud oft akzeptabel.
 
+Optionale Overlays (BookStack, Listmonk): Name und Logo in deren Settings, Farben soweit die Software das hergibt. Kein pixelgleiches Portal. Details der Produkte: [optionale-module.md](optionale-module.md).
+
 ## Was ihr selbst setzt (Portal)
 
 Hauptmenü, Mein Konto, CAV-Oberfläche: euer HTML/CSS. Das soll die **Führungs-CI** sein (Farbe, Logo, Schrift). Die anderen Apps nähern sich dem an, ersetzen es nicht pixelgleich.
 
-Praktische Reihenfolge: Logo+Farbpalette definieren → Keycloak-Login → Portal → Element Web → Zammad → Frappe Learning → Nextcloud. Store-Apps nicht als erstes versprechen.
+Praktische Reihenfolge: Logo+Farbpalette definieren → Keycloak-Login → Portal → Element Web → Zammad → Frappe Learning → Nextcloud → optionale Overlays. Store-Apps nicht als erstes versprechen.

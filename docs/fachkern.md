@@ -4,7 +4,7 @@ System of Record für KCanG-Zahlen: Mitglieder, Chargen, Abgabe, Meldung. Nicht 
 
 ## Portal (FastAPI)
 
-**Hauptmenü (Linktree, rollenabhängig):** Chat (Element, nur mit `schulung:chat`), CAV, Support (Zammad), Schulungen (Frappe Learning), Cloud nur für Ämter. Zuerst Verein wählen, wenn mehrere Ämter.
+**Hauptmenü (Linktree, rollenabhängig):** Chat (Element, nur mit `schulung:chat`), CAV, Support (Zammad), Schulungen (Frappe Learning), Cloud nur für Ämter, optionale Overlays nur wenn eingeschaltet. Zuerst Verein wählen, wenn mehrere Ämter.
 
 **Aufnahme:** gebrandetes Formular auf der Vereinsseite / am Portal, idiotensicher, ohne Zammad-Oberfläche. Absenden legt CAV-Antrag plus Keycloak `mitgliedschaft:pending` an. Optional ein internes Zammad-Ticket für den Vorstand — die antragstellende Person sieht das nicht.
 
@@ -42,12 +42,15 @@ Abgabe ist Weitergabe an Mitglieder (Selbstkosten), kein Shop. Zahlungsdienst zi
 | Login, MFA, Gruppen | Keycloak |
 | Chat | Synapse + Element |
 | Support / Amts-Tickets | Zammad |
-| Schulungen, Quiz, Kursinhalt | Frappe Learning |
-| Backoffice-Dateien und Office | Nextcloud + Collabora + Kalender |
+| Schulungen, Quiz, Kursinhalt | Frappe Learning (nicht Moodle) |
+| Backoffice-Dateien, Rechte-Ablage, Office, Scan | Nextcloud + Collabora + Group Folders + Kalender |
+| Mitglieder-Handbuch | optional BookStack; FAQs: Zammad-KB |
+| Video | optional Jitsi |
 | HTTPS | Traefik |
 | Mailserver | externer Anbieter |
 | SEPA-Lastschrift | Mollie / GoCardless / Stripe |
-| Finanzbuchhaltung | DATEV / Lexoffice später |
+| Finanzbuchhaltung | DATEV / Lexoffice später (nicht FOSS) |
+| Eingangsrechnungs-Freigabe | Zammad + Nextcloud, kein Extra-ERP |
 | Zutritt / Kameras / SPS | später Geräte |
 
 ## Schnittstellen

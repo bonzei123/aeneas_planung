@@ -2,7 +2,7 @@
 
 ## Was SSO von allein kann
 
-Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, Synapse (bzw. MAS), **Zammad** und **Frappe Learning** sind OIDC-Clients desselben Realms.
+Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, Synapse (bzw. MAS), **Zammad** und **Frappe Learning** sind OIDC-Clients desselben Realms. Optionale Overlays (BookStack, Jitsi, Listmonk, Vaultwarden) ebenfalls, nur wenn das Overlay läuft.
 
 Ablauf:
 
@@ -27,7 +27,7 @@ OIDC ist nur die Anmeldung (wer ist das). **Berechtigung** (was darf die Person)
 
 Keycloak Authorization Services (UMA, Policies pro Resource) nicht nutzen. Zu komplex für den Solo-Betrieb; CAV prüft Objekt-Rechte selbst, Rollen kommen aus dem Token.
 
-Nextcloud, Zammad, Frappe Learning: jeweilige IdP-/Group-Mapper auf dieselben Gruppennamen. Matrix: nicht nativ, eigener Abgleich (unten).
+Nextcloud, Zammad, Frappe Learning und optionale Overlays: jeweilige IdP-/Group-Mapper auf dieselben Gruppennamen. Matrix: nicht nativ, eigener Abgleich (unten). Kein zweites Benutzerverzeichnis im Wiki.
 
 ## Was SSO nicht kann
 
@@ -135,7 +135,7 @@ Element Server Suite „Group Sync“ wäre die Kaufvariante. Für den Solo-Betr
 Mitglied Wanne-Eickel:
 
 1. Login Keycloak
-2. Portal: Belege, CAV, Support, Schulungen; Chat-Link erst mit `schulung:chat`
+2. Portal: Belege, CAV, Support, Schulungen; Chat-Link erst mit `schulung:chat`; optionale Links (Wiki, Meet) nur wenn Overlay an
 3. LMS: Onboarding, Prävention, Chat-Regeln
 4. Element (nach Chat-Kurs): Gesamtverein + NRW + Wanne-Eickel
 5. Zammad: eigene Tickets

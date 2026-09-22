@@ -38,7 +38,7 @@ flowchart TB
   cav -.-> kc
 ```
 
-Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles andere fertige Software hinter demselben Keycloak. LMS-Abschluss → CAV → Gruppe `schulung:*` in Keycloak.
+Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles andere fertige Software hinter demselben Keycloak. LMS-Abschluss → CAV → Gruppe `schulung:*` in Keycloak. Optionale Overlays (Wiki, Jitsi, …) stehen nicht in diesem Kernbild; [optionale-module.md](optionale-module.md).
 
 ## Hosts
 
@@ -51,6 +51,7 @@ Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles an
 | `help.example` | Zammad | alle (Mitglied = Kunde, Amt = Agent nach Gruppe) |
 | `learn.example` | Frappe Learning | `mitgliedschaft:aktiv` |
 | `cloud.example` | Nextcloud + Collabora | nur Backoffice-Gruppen |
+| `wiki.example` / `meet.example` / … | optionale Overlays | nur wenn eingeschaltet, siehe [optionale-module.md](optionale-module.md) |
 
 ## Wer darf wohin
 
@@ -67,7 +68,9 @@ Feinkatalog der Türen: [schulungen.md](schulungen.md).
 
 ## Docker Compose (Einstieg)
 
-Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes. Bei Last Zammad/Synapse/Postgres eher eigene VMs, Compose bleibt das Modell. Frappe Learning ist schlanker als Moodle; eigene VM erst bei Last, nicht von Tag eins.
+Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes. Bei Last Zammad/Synapse/Postgres eher eigene VMs, Compose bleibt das Modell. Frappe Learning statt Moodle: MariaDB+Worker, keine Campus-VM von Tag eins; eigene VM erst bei Last.
+
+Testserver zuerst **Kern ohne CAV-Fachlogik**: Traefik/Caddy, Keycloak, Portal, Zammad, dann LMS, Matrix, Nextcloud. CAV-Stub darf warten. Optionale Overlays danach.
 
 | Container | Rolle | Logik |
 | --- | --- | --- |
@@ -75,7 +78,7 @@ Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes. Bei Last Zammad/Synapse/Postg
 | keycloak + eigene DB | Konten, Gruppen, Clients | konfigurieren |
 | synapse + element (+ MAS) | Chat, Spaces, keine Federation | konfigurieren |
 | zammad + elasticsearch/meilisearch laut Doku | Support und Amts-Tickets | konfigurieren |
-| frappe-learning + MariaDB + Redis | Schulungen, Mitwirkungsnachweis | konfigurieren |
+| frappe-learning + MariaDB + Redis | Schulungen, Mitwirkungsnachweis (nicht Moodle) | konfigurieren |
 | nextcloud + collabora + redis | Backoffice-Dateien, Kalender, Office | konfigurieren |
 | portal | Linktree, Aufnahme, Mein Konto, dünne APIs | selbst schreiben |
 | gruppenabgleich | Keycloak → Matrix-Spaces (inkl. `schulung:chat`) | selbst schreiben |
@@ -84,9 +87,9 @@ Ein Debian- oder Ubuntu-LTS-Host, kein Kubernetes. Bei Last Zammad/Synapse/Postg
 
 Getrennte Datenbanken je Dienst. Gemeinsame Postgres-Instanz am Anfang zulässig, getrennte Databases. LMS: MariaDB daneben, nicht in denselben Postgres zwingen.
 
-CAV spricht nicht mit Nextcloud für Mitglieder-PDFs. Zammad hält Tickets. Frappe Learning hält Kurse. CAV hält Nachweise und Türen. Portal verlinkt und zeigt unter Mein Konto Beitrag, Tokens und grob den Schulungsstatus.
+CAV spricht nicht mit Nextcloud für Mitglieder-PDFs. Zammad hält Tickets. Frappe Learning hält Kurse. CAV hält Nachweise und Türen. Portal verlinkt und zeigt unter Mein Konto Beitrag, Tokens und grob den Schulungsstatus. Amts-Ablage nur Nextcloud, kein zweites Archiv.
 
-Zahlungsdienst: [beitrag-sepa.md](beitrag-sepa.md). Tickets: [tickets.md](tickets.md). Schulung: [schulungen.md](schulungen.md).
+Zahlungsdienst: [beitrag-sepa.md](beitrag-sepa.md). Tickets: [tickets.md](tickets.md). Schulung: [schulungen.md](schulungen.md). Overlays: [optionale-module.md](optionale-module.md).
 
 ## Mandanten
 
@@ -96,4 +99,4 @@ Jedes Zweigverein ist rechtlich eigene Anbauvereinigung (Erlaubnis, 500er-Grenze
 
 ## Frontends
 
-Portal und CAV: FastAPI plus HTML-Templates. Zammad, Frappe Learning, Element, Nextcloud: deren eigene UI, SSO. Mitglieder sehen Aufnahme und Schulungsstatus im Portal, nicht als Zammad-Ticketmaske.
+Portal und CAV: FastAPI plus HTML-Templates. Zammad, Frappe Learning, Element, Nextcloud (plus optionales BookStack/Jitsi): deren eigene UI, SSO. Mitglieder sehen Aufnahme und Schulungsstatus im Portal, nicht als Zammad-Ticketmaske.
