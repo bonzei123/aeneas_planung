@@ -26,7 +26,7 @@ Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beit
 | [docs/mail.md](docs/mail.md) | Kein Mailserver, Kontakt nach außen |
 | [docs/repos-und-docker.md](docs/repos-und-docker.md) | Compose reicht; welche GitHub-Repos |
 
-Go-Live und Keycloak-Klicks (lokale Extra-Schritte markiert): `aeneas_infra/SETUP.md`.
+Go-Live (Klickweg, Reihenfolge): `aeneas_infra/SETUP.md`. Pitch und Architektur bleiben in diesem Repo.
 
 ## Nicht das Ziel
 
