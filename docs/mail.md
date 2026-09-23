@@ -1,5 +1,7 @@
 # Mail
 
+Betriebsschritte (mailbox.org, Zammad IMAP/SMTP, Keycloak SMTP): `aeneas_infra/MAIL.md`.
+
 **Kein eigener Mailserver.** Kein Mailcow, kein Postfix, keine Spam- und Blacklist-Pflege auf dem Vereins-Host.
 
 Technisch ginge Mailcow/Stalwart auf derselben Kiste. Dann gehört euch PTR, rDNS, SPF, DKIM, DMARC, TLS-RPT, Warmup, Blocklists, Greylisting, Spamassassin, Virus, Queue, Speicher, Updates, **und** die Zustellung zu Gmail/Outlook. Ein neues Hetzner-/netcup-IP startet ohne Reputation — Passwort-Mails und Behördenpost landen im Spam, bis ihr Wochen warmlauft oder auf einer Liste steht. Cannabis-Vereinsdomain macht das nicht leichter. Solo: das ist ein zweiter Fulltime-Job neben Keycloak/Zammad.
