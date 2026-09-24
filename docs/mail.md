@@ -78,7 +78,7 @@ Für den Gesamtverein: **Business** mit Admin-Konsole, nicht 180 Privatkonten. S
 
 Verschiedene Personen brauchen **keine eigenen IMAP-Fächer**. Amt = Keycloak `rolle:*` plus Zammad-Agent in der passenden Gruppe. Neue Mail an `praevention@` wird Ticket in der Präventions-Queue; wer die Rolle hat, sieht sie (Browser/App, optional Zammad-Benachrichtigung an die Login-Mail). Untereinander: **Matrix**. Nach außen antwortet Zammad mit Absender `praevention@…`, nicht mit der Privatadresse.
 
-**Mitgliederbriefe: nicht über mailbox.** Transactional (Passwort, Ticket, SEPA-Hinweis) ja. Newsletter an hunderte oder 20k Adressen brennt die Domain-Reputation und ist kein Produkt von mailbox (Limits existieren, sind kein Newsletter-Tool). Dafür optional **Listmonk** plus eigenen Versandweg (SMTP des Anbieters nur bei kleinen Listen nach Absprache, sonst ESP). Abmelden und Double-Opt-in gehören dazu, nicht BCC an `vorstand@…`.
+**Mitgliederbriefe: nicht über mailbox.** Transactional (Passwort, Ticket, SEPA-Hinweis) ja. Ein Newsletter aus Thunderbird/BCC oder Listmonk über dasselbe Fach brennt die Domain-Reputation von `help@` und Keycloak. mailbox ist kein Newsletter-Tool und **keine Mailingliste** (Heinlein-Schwester: [JPBerlin](https://jpberlin.de/mailinglisten-und-newsletterversand)). Optional später **Listmonk** plus ESP, oder nur Matrix-Ankündigungen. Abmelden und Double-Opt-in gehören dazu. Details: [optionale-module.md](optionale-module.md).
 
 ## Was nicht veröffentlicht wird
 

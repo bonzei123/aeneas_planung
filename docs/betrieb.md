@@ -86,4 +86,4 @@ Testserver zuerst den **Kern**, ohne CAV-Fachlogik und ohne Overlays. CAV-Repo i
 10. Zammad-Vorlagen nur für Amts-Onboarding
 11. Abgabe und Limits (an Prävention knüpfen)
 12. Track & Trace, §-26-Export
-13. Optionale Overlays nach Bedarf: BookStack, Jitsi, Listmonk, Vaultwarden — [optionale-module.md](optionale-module.md)
+13. Optionale Overlays nach Bedarf: BookStack, Jitsi, Listmonk, Vaultwarden; **OpenSlides** erst zur Mitgliederversammlung — [optionale-module.md](optionale-module.md)

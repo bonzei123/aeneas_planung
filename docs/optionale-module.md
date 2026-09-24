@@ -74,6 +74,33 @@ Nicht: **Element X** und nicht Matrix Authentication Service nur dafür. Element
 
 Handy zuerst: Store-App **Element** (ohne X), Homeserver `chat.example`, SSO. Eigene Store-Identität erst, wenn Branding das wirklich braucht.
 
+## Mitgliederversammlung / Wahlen
+
+**Ja, später.** OpenSlides oder etwas in dieser Klasse ist nötig, sobald es eine MV mit Anträgen und Personenwahl gibt — nicht im Kern-Compose, nicht vor Chat/Tickets/Schulung.
+
+Software macht keine Wahl „rechtskonform“. Dafür Satzung (elektronische MV / Stimmabgabe, § 32 BGB), Wahlordnung, Einladung, Quorum, Stimmrecht aus der Mitgliederliste. OpenSlides dokumentiert den Ablauf (Tagesordnung, Redeliste, Anträge, offen oder geheim, Ergebnis, Export). Das ist das deutsche Vereinsprodukt für genau diesen Tag; Verbände nutzen es so.
+
+Nicht ersetzen durch:
+
+- **POLYAS** und ähnliche Wahl-SaaS — nur Urne, oft Zertifikat. Teuer, zweites Login. Nur wenn ein Anwalt eine zertifizierte Online-Wahl ohne Versammlungsbetrieb verlangt.
+- **Antragsgrün** — nur Anträge.
+- **Jitsi / Element Call** — Bild und Ton der Versammlung, nicht die Stimme.
+- Umfrage im Portal oder LimeSurvey als Vorstandswahl.
+
+Betrieb: extra Host `mv.example` (OpenSlides 4 ist ein eigener Container-Schwarm) **oder** SaaS nur um den Versammlungstag, gleicher Keycloak-OIDC. Nicht 180 Instanzen.
+
+## Rundschreiben und Mailinglisten
+
+Zwei verschiedene Dinge. **Mailingliste** (alle schreiben allen) ist bei euch **Matrix**. Dafür kein Mailman, kein Verteiler in Thunderbird.
+
+**Newsletter** (Vorstand an viele, HTML, Abmelden, Double-Opt-in) nur, wenn Leute per E-Mail erreicht werden müssen, die nicht in Element lesen. Sonst Ankündigungsraum.
+
+**Nicht über mailbox.org.** Das Postfach ist SMTP/IMAP für Keycloak, Zammad, Behörden. Massenversand über dieselbe Domain verbrennt die Zustellung der Passwort-Mails. mailbox hat kein Listenprodukt; der Support verweist auf **JPBerlin** (Heinlein, Berlin). Technisch geht SMTP, ein Vereinsnewsletter gehört trotzdem nicht ins selbe Fach.
+
+Wenn E-Mail-Rundschreiben sein muss: **Listmonk** (Compose, OIDC, `news.example`) plus **eigener Versandweg** (ESP: JPBerlin, rapidmail, Brevo, SES — nicht das mailbox-Fach von `help@`). Kleine Listen über mailbox-SMTP nur nach Absprache mit dem Anbieter, eigene Absenderdomain idealerweise getrennt. Nicht: BCC an `vorstand@`.
+
+SaaS-Newsletter statt Listmonk ist erlaubt, wenn ihr keinen Extra-Dienst wollen — dann kein Overlay.
+
 ## Weitere optionale Dienste
 
 Nur was zum Verein passt und den Filter oben übersteht.
@@ -82,10 +109,10 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | --- | --- | --- | --- |
 | Mitglieder-Handbuch | BookStack | aktiv, nach Schulung laut Verein | ja, siehe oben |
 | Amts-Ablage / Scan | Nextcloud Group Folders | nur Amt | Kern, nicht Overlay; kein Paperless |
-| Video-Sprechstunde / MV | **Jitsi** hinter Traefik, JWT an Keycloak | aktiv + Amt | ja; BigBlueButton wie Moodle zu schwer |
-| E-Mail-Rundschreiben | **Listmonk** | wer nicht in Matrix liest | ja; SMTP bleibt beim Anbieter, kein Mailserver |
+| Video-Sprechstunde | **Jitsi** hinter Traefik, JWT an Keycloak | aktiv + Amt | ja; Bild/Ton der MV, nicht die Wahl. BBB wie Moodle zu schwer |
+| E-Mail-Rundschreiben | **Listmonk** + eigener Versandweg | wer nicht in Matrix liest | ja, nur wenn E-Mail sein muss; nicht über mailbox.org |
 | Amts-Passwörter | **Vaultwarden** | `rolle:*` / `backoffice`, MFA | ja; nicht für Mitglieder |
-| Mitgliederversammlung | **OpenSlides** | aktiv, oft nur am Versammlungstag | später; deutsches Vereinsprodukt, extra Host |
+| Mitgliederversammlung / Wahl | **OpenSlides** | aktiv, oft nur am Versammlungstag | später, aber nötig; extra Host oder SaaS |
 | Eigene Chat-App | Element Web / PWA / Store-Build | aktiv mit `schulung:chat` | ja, optional; siehe oben; nicht Element X |
 | Monitoring | Uptime Kuma o. ä. | nur Betrieb | ja, kein Mitglieder-Feature |
 | Mitglieder-Termine | zunächst Portal oder Matrix; sonst Mobilizon | aktiv | erst wenn der Kalender in Nextcloud den Mitgliedern fehlt |
@@ -99,6 +126,8 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | Paperless-ngx neben Nextcloud | doppelte Ablage, zwei Rechte, kein Sync |
 | GitLab / Forgejo für Mitglieder | siehe Git |
 | Discourse / Forum | Matrix ist der Mitgliederkanal |
+| Mailman / Mailcow-Listen | Diskussionslisten = Matrix; Newsletter nicht über den Vereins-Posteingang |
+| POLYAS als Standard-MV | nur Wahl-SaaS; OpenSlides bleibt das Versammlungsprodukt |
 | BigBlueButton, Moodle, ILIAS | RAM und Pflege |
 | Zweite Cloud / OnlyOffice extra | Collabora in Nextcloud reicht |
 | n8n / Camunda / Nextcloud-Windmill | Aufträge bleiben Zammad; Buchen in DATEV/Lexoffice |
@@ -113,8 +142,9 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | --- | --- |
 | `wiki.example` | BookStack |
 | `meet.example` | Jitsi |
-| `news.example` | Listmonk (Admin); Zustellung per SMTP |
+| `news.example` | Listmonk (Admin); Zustellung per ESP/SMTP, nicht mailbox.org |
 | `pass.example` | Vaultwarden |
+| `mv.example` | OpenSlides (oder SaaS-URL des Anbieters) |
 | — | eigene App: kein extra Host, Client auf `chat.example` |
 
 Portal-Linktree zeigt nur, was der Verein eingeschaltet hat und wozu Token/Gruppe passt.

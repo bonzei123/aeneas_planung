@@ -2,7 +2,7 @@
 
 ## Was SSO von allein kann
 
-Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, Synapse (bzw. MAS), **Zammad** und **Frappe Learning** sind OIDC-Clients desselben Realms. Optionale Overlays (BookStack, Jitsi, Listmonk, Vaultwarden) ebenfalls, nur wenn das Overlay läuft.
+Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, Synapse (bzw. MAS), **Zammad** und **Frappe Learning** sind OIDC-Clients desselben Realms. Optionale Overlays (BookStack, Jitsi, Listmonk, Vaultwarden, OpenSlides) ebenfalls, nur wenn das Overlay läuft.
 
 Ablauf:
 

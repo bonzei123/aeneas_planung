@@ -61,9 +61,10 @@ Nicht jeder Verein braucht dasselbe. Overlay, gleicher Realm, Portal zeigt nur e
 | Git für Mitglieder | **nein**; Code auf GitHub, Satzung im Wiki/Nextcloud |
 | DMS | nur **Nextcloud**; Paperless nicht |
 | Eingangsrechnungen | **Zammad + Nextcloud**; buchen DATEV/Lexoffice; kein FOSS-ERP |
-| Video | optional **Jitsi**, kein BBB |
-| Newsletter | optional **Listmonk** |
+| Video | optional **Jitsi**, kein BBB; MV-Ton/Bild, nicht die Wahl |
+| Newsletter | nur wenn E-Mail-Rundschreiben nötig: **Listmonk + ESP**, nicht mailbox.org. Diskussion = Matrix |
 | Amts-Passwörter | optional **Vaultwarden** |
+| Versammlung / Wahl | später **OpenSlides** (Host oder SaaS). Satzung muss elektronische MV erlauben. Kein Eigenbau, POLYAS nur auf Anwaltwunsch |
 | Eigene Chat-App | optional; zuerst Element Web branden (schon im Kern). Desktop/PWA/Store-Build auf **Element**, nicht Element X, kein MAS nur dafür. [ci-cd.md](ci-cd.md) |
 
 [optionale-module.md](optionale-module.md).
@@ -82,4 +83,4 @@ Alles Web-seitig brandbar (Logo, Name, Farben), mit Abstufungen. Matrix hat kein
 
 ## Code, den niemand erklärt
 
-Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Frappe Learning, Nextcloud, Traefik, Postgres, MariaDB (LMS), Zahlungsdienst. Optional dazu: BookStack, Jitsi, Listmonk, Vaultwarden, eigene gebrandete Chat-App — nur Images, Compose oder Client-Build, kein Fork des Fachkerns.
+Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Frappe Learning, Nextcloud, Traefik, Postgres, MariaDB (LMS), Zahlungsdienst. Optional dazu: BookStack, Jitsi, Listmonk, Vaultwarden, OpenSlides, eigene gebrandete Chat-App — nur Images, Compose, SaaS oder Client-Build, kein Fork des Fachkerns.
