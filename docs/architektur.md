@@ -6,16 +6,27 @@
 flowchart TB
   person[Person ein Konto]
   proxy[Traefik TLS]
-  kc[Keycloak]
-  portal[Portal FastAPI]
-  cav[CAV-Kern FastAPI]
-  mx[Synapse und Element]
-  nc[Nextcloud Collabora]
-  za[Zammad]
-  lms[Frappe Learning]
-  pg[(PostgreSQL)]
-  mdb[(MariaDB LMS)]
-  files[Dateispeicher NC und LMS]
+
+  subgraph kern["Kern"]
+    kc[Keycloak]
+    portal[Portal FastAPI]
+    cav[CAV-Kern FastAPI]
+    mx[Synapse und Element Web]
+    nc[Nextcloud Collabora]
+    za[Zammad]
+    lms[Frappe Learning]
+    pg[(PostgreSQL)]
+    mdb[(MariaDB LMS)]
+    files[Dateispeicher NC und LMS]
+  end
+
+  subgraph opt["Optional"]
+    wiki[BookStack Wiki]
+    meet[Jitsi]
+    news[Listmonk]
+    passw[Vaultwarden]
+    app[Eigene gebrandete App]
+  end
 
   person --> proxy
   proxy --> kc
@@ -36,9 +47,19 @@ flowchart TB
   lms --> files
   lms -.-> cav
   cav -.-> kc
+
+  proxy -.-> wiki
+  proxy -.-> meet
+  proxy -.-> news
+  proxy -.-> passw
+  wiki -.-> pg
+  person -.-> app
+  app -.-> mx
 ```
 
-Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles andere fertige Software hinter demselben Keycloak. LMS-Abschluss → CAV → Gruppe `schulung:*` in Keycloak. Optionale Overlays (Wiki, Jitsi, …) stehen nicht in diesem Kernbild; [optionale-module.md](optionale-module.md).
+Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles andere fertige Software hinter demselben Keycloak. LMS-Abschluss → CAV → Gruppe `schulung:*` in Keycloak.
+
+**Gestrichelt / Kasten Optional:** nicht im Kern-Compose, Verein schaltet ein oder lässt weg. [optionale-module.md](optionale-module.md). Eigene App = gebrandetes Element (Web schon im Kern, Desktop/PWA/Store später) auf dem **selben** Login; kein Element X, kein MAS nur dafür. [ci-cd.md](ci-cd.md).
 
 ## Hosts
 
@@ -51,7 +72,8 @@ Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles an
 | `help.example` | Zammad | alle (Mitglied = Kunde, Amt = Agent nach Gruppe) |
 | `learn.example` | Frappe Learning | `mitgliedschaft:aktiv` |
 | `cloud.example` | Nextcloud + Collabora | nur Backoffice-Gruppen |
-| `wiki.example` / `meet.example` / … | optionale Overlays | nur wenn eingeschaltet, siehe [optionale-module.md](optionale-module.md) |
+| `wiki.example` / `meet.example` / `news.example` / `pass.example` | optionale Overlays | nur wenn eingeschaltet, siehe [optionale-module.md](optionale-module.md) |
+| — | eigene gebrandete App | kein extra Host; Client auf `chat.example`, optional |
 
 ## Wer darf wohin
 
@@ -76,7 +98,7 @@ Testserver zuerst **Kern ohne CAV-Fachlogik**: Traefik/Caddy, Keycloak, Portal, 
 | --- | --- | --- |
 | traefik | HTTPS, Hosts | konfigurieren |
 | keycloak + eigene DB | Konten, Gruppen, Clients | konfigurieren |
-| synapse + element (+ MAS) | Chat, Spaces, keine Federation | konfigurieren |
+| synapse + element | Chat, Spaces, keine Federation | konfigurieren |
 | zammad + elasticsearch/meilisearch laut Doku | Support und Amts-Tickets | konfigurieren |
 | frappe-learning + MariaDB + Redis | Schulungen, Mitwirkungsnachweis (nicht Moodle) | konfigurieren |
 | nextcloud + collabora + redis | Backoffice-Dateien, Kalender, Office | konfigurieren |
@@ -101,4 +123,4 @@ Ausgliedern und Wiederbeitritt: Datenpaket, [mandanten.md](mandanten.md). Kein z
 
 ## Frontends
 
-Portal und CAV: FastAPI plus HTML-Templates. Zammad, Frappe Learning, Element, Nextcloud (plus optionales BookStack/Jitsi): deren eigene UI, SSO. Mitglieder sehen Aufnahme und Schulungsstatus im Portal, nicht als Zammad-Ticketmaske.
+Portal und CAV: FastAPI plus HTML-Templates. Zammad, Frappe Learning, Element Web, Nextcloud (plus optionales BookStack/Jitsi): deren eigene UI, SSO. Mitglieder sehen Aufnahme und Schulungsstatus im Portal, nicht als Zammad-Ticketmaske. Chat bleibt Element Web mit Keycloak; eine eigene gebrandete App ist optional und ändert den Server nicht.

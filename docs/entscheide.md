@@ -64,6 +64,7 @@ Nicht jeder Verein braucht dasselbe. Overlay, gleicher Realm, Portal zeigt nur e
 | Video | optional **Jitsi**, kein BBB |
 | Newsletter | optional **Listmonk** |
 | Amts-Passwörter | optional **Vaultwarden** |
+| Eigene Chat-App | optional; zuerst Element Web branden (schon im Kern). Desktop/PWA/Store-Build auf **Element**, nicht Element X, kein MAS nur dafür. [ci-cd.md](ci-cd.md) |
 
 [optionale-module.md](optionale-module.md).
 
@@ -81,4 +82,4 @@ Alles Web-seitig brandbar (Logo, Name, Farben), mit Abstufungen. Matrix hat kein
 
 ## Code, den niemand erklärt
 
-Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Frappe Learning, Nextcloud, Traefik, Postgres, MariaDB (LMS), Zahlungsdienst. Optional dazu: BookStack, Jitsi, Listmonk, Vaultwarden — nur Images und Compose, kein Fork.
+Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Frappe Learning, Nextcloud, Traefik, Postgres, MariaDB (LMS), Zahlungsdienst. Optional dazu: BookStack, Jitsi, Listmonk, Vaultwarden, eigene gebrandete Chat-App — nur Images, Compose oder Client-Build, kein Fork des Fachkerns.

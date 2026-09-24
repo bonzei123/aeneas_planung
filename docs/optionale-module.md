@@ -2,9 +2,9 @@
 
 Kein zweiter Kern. Was hier steht, ist **Compose-Overlay**, gleicher Traefik, gleicher Realm `aeneas`. Ein Verein oder der Gesamtverein schaltet es ein; andere laufen ohne. Kein eigenes GitHub-Repo pro Produkt, keine 180 Instanzen.
 
-Kern bleibt: Keycloak, Portal, CAV, Zammad, Frappe Learning, Matrix/Element, Nextcloud (nur Backoffice). Optional kommt **nach** dem Testserver-Kern, nicht davor.
+Kern bleibt: Keycloak, Portal, CAV, Zammad, Frappe Learning, Matrix + Element Web, Nextcloud (nur Backoffice). Optional kommt **nach** dem Testserver-Kern, nicht davor. Die eigene App ist kein Extra-Homeserver: derselbe Chat, nur andere Hülle.
 
-Filter für jedes Overlay: Docker Compose, Keycloak-OIDC, kein Campus-/k8s-Stack, Solo-Betrieb erklärbar, Rechte aus denselben Gruppen (`verein:*`, `mitgliedschaft:*`, `rolle:*`, `schulung:*`). Kein Keycloak-UMA.
+Filter für jedes Overlay: Docker Compose, Keycloak-OIDC, kein Campus-/k8s-Stack, Solo-Betrieb erklärbar, Rechte aus denselben Gruppen (`verein:*`, `mitgliedschaft:*`, `rolle:*`, `schulung:*`). Kein Keycloak-UMA. Ausnahme eigene App: Client-Build, kein zweites Compose-Produkt.
 
 ## Wiki
 
@@ -56,6 +56,24 @@ Paperless-ngx **nicht** einplanen. Dieselbe PDF in Cloud *und* Paperless ist dop
 
 Nicht: Alfresco, Mayan, OpenKM, SeedDMS.
 
+## Eigene App
+
+**Ja, optional**, und kein zweiter Chat-Server.
+
+Mitglieder chatten schon im Kern über **Element Web** auf `chat.example` (Keycloak-SSO, Config `brand` / Logo). Das reicht als gebrandeter Einstieg (Browser, als PWA speicherbar).
+
+Darüber hinaus, wenn der Verein eine „eigene App“ will:
+
+| Stufe | Was | Extra-Dienst? |
+| --- | --- | --- |
+| Web (Kern) | Element Web, Name und Logo in der Config | nein |
+| PWA / Desktop-Hülle | dieselbe Web-Oberfläche, Icon und Fenstername | nein |
+| Store (Play/App Store) | eigener Build von **Element** (ohne X), Entwicklerkonto, Pflege bei Upstream-Updates | nein, nur Client |
+
+Nicht: **Element X** und nicht Matrix Authentication Service nur dafür. Element X ist eine andere App mit anderem Login; der jetzige Keycloak-Weg bleibt. Store-Apps von Element heißen weiter „Element“, bis ihr selbst baut oder White-Label kauft. Details: [ci-cd.md](ci-cd.md).
+
+Handy zuerst: Store-App **Element** (ohne X), Homeserver `chat.example`, SSO. Eigene Store-Identität erst, wenn Branding das wirklich braucht.
+
 ## Weitere optionale Dienste
 
 Nur was zum Verein passt und den Filter oben übersteht.
@@ -68,6 +86,7 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | E-Mail-Rundschreiben | **Listmonk** | wer nicht in Matrix liest | ja; SMTP bleibt beim Anbieter, kein Mailserver |
 | Amts-Passwörter | **Vaultwarden** | `rolle:*` / `backoffice`, MFA | ja; nicht für Mitglieder |
 | Mitgliederversammlung | **OpenSlides** | aktiv, oft nur am Versammlungstag | später; deutsches Vereinsprodukt, extra Host |
+| Eigene Chat-App | Element Web / PWA / Store-Build | aktiv mit `schulung:chat` | ja, optional; siehe oben; nicht Element X |
 | Monitoring | Uptime Kuma o. ä. | nur Betrieb | ja, kein Mitglieder-Feature |
 | Mitglieder-Termine | zunächst Portal oder Matrix; sonst Mobilizon | aktiv | erst wenn der Kalender in Nextcloud den Mitgliedern fehlt |
 | Umfragen | Zammad / Portal klein; sonst LimeSurvey | aktiv | nur bei echtem Bedarf |
@@ -86,7 +105,7 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | Akaunting / Invoice Ninja / Dolibarr als Rechnungs-ERP | zweites Geldsystem; Dolibarr = ERPNext-Klasse |
 | Immich, persönlicher Foto-Stack | kein Vereinszweck |
 | ERPNext, CiviCRM | Fachkern ist der CAV |
-| Öffentliches CMS (Ghost, WordPress) | Portal + Impressum; Marketing-Site darf extern bleiben |
+| Element X + MAS nur für eine Store-App | anderer Login; gebrandetes Element (ohne X) reicht |
 
 ## Hosts (nur wenn Overlay an)
 
@@ -96,6 +115,7 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | `meet.example` | Jitsi |
 | `news.example` | Listmonk (Admin); Zustellung per SMTP |
 | `pass.example` | Vaultwarden |
+| — | eigene App: kein extra Host, Client auf `chat.example` |
 
 Portal-Linktree zeigt nur, was der Verein eingeschaltet hat und wozu Token/Gruppe passt.
 

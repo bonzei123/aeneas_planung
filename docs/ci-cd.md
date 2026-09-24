@@ -41,7 +41,7 @@ Das ist der erste Eindruck vor dem Portal. Lohnt sich früh.
 
 Web und Desktop: in `config.json` u. a. `brand` (Anzeigename statt „Element“), Logo auf der Login-Seite, Hintergrund, Farben/`custom_themes`, eigene Welcome-Seite. Die Doku sagt ausdrücklich: **kein vollständiges Private Label**, aber ein klarer Vereinslook ist üblich.
 
-Handy: die Apps aus Play Store / App Store heißen weiter **Element** und zeigen Element-Branding. Ihr könnt den Homeserver voreinstellen, nicht die Store-Identität. Eigene gebrandete Messenger-App = eigener Build (Fork), Apple- und Google-Entwicklerkonto, Pflege bei jedem Upstream-Update — oder ein kostenpflichtiges White-Label von Element. Für den Start: **gebrandetes Element Web** (als PWA speicherbar), Store-Element nur als Zweitweg.
+Handy: die Apps aus Play Store / App Store heißen weiter **Element** und zeigen Element-Branding. Ihr könnt den Homeserver voreinstellen, nicht die Store-Identität. Eigene gebrandete Messenger-App = eigener Build (Fork), Apple- und Google-Entwicklerkonto, Pflege bei jedem Upstream-Update — oder ein kostenpflichtiges White-Label von Element. **Optional**, nicht im Kern: zuerst gebrandetes Element Web (als PWA speicherbar), Store-Element nur als Zweitweg. Nicht Element X, kein MAS nur für die App. [optionale-module.md](optionale-module.md).
 
 Andere Matrix-Clients (FluffyChat, Cinny) sind teils leichter zu themen, dann habt ihr aber zwei Welten.
 
