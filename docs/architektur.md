@@ -72,7 +72,7 @@ Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles an
 | `help.example` | Zammad | alle (Mitglied = Kunde, Amt = Agent nach Gruppe) |
 | `learn.example` | Frappe Learning | `mitgliedschaft:aktiv` |
 | `cloud.example` | Nextcloud + Collabora | nur Backoffice-Gruppen |
-| `wiki.example` / `meet.example` / `news.example` / `pass.example` / `mv.example` | optionale Overlays | nur wenn eingeschaltet, siehe [optionale-module.md](optionale-module.md) |
+| `wiki.example` / `meet.example` / `news.example` / `pass.example` / `wahl.example` | optionale Overlays | nur wenn eingeschaltet, siehe [optionale-module.md](optionale-module.md) |
 | — | eigene gebrandete App | kein extra Host; Client auf `chat.example`, optional |
 
 ## Wer darf wohin

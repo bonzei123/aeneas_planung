@@ -64,7 +64,7 @@ Nicht jeder Verein braucht dasselbe. Overlay, gleicher Realm, Portal zeigt nur e
 | Video | optional **Jitsi**, kein BBB; MV-Ton/Bild, nicht die Wahl |
 | Newsletter | nur wenn E-Mail-Rundschreiben nötig: **Listmonk + ESP**, nicht mailbox.org. Diskussion = Matrix |
 | Amts-Passwörter | optional **Vaultwarden** |
-| Versammlung / Wahl | später **OpenSlides** (Host oder SaaS). Satzung muss elektronische MV erlauben. Kein Eigenbau, POLYAS nur auf Anwaltwunsch |
+| Versammlung / Wahl | später **OpenSlides** (Host `wahl.` oder SaaS). Login zuerst lokal, nicht Keycloak. Satzung muss elektronische MV erlauben. Kein Eigenbau, POLYAS nur auf Anwaltwunsch |
 | Eigene Chat-App | optional; zuerst Element Web branden (schon im Kern). Desktop/PWA/Store-Build auf **Element**, nicht Element X, kein MAS nur dafür. [ci-cd.md](ci-cd.md) |
 
 [optionale-module.md](optionale-module.md).

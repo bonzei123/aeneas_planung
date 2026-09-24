@@ -87,7 +87,7 @@ Nicht ersetzen durch:
 - **Jitsi / Element Call** — Bild und Ton der Versammlung, nicht die Stimme.
 - Umfrage im Portal oder LimeSurvey als Vorstandswahl.
 
-Betrieb: extra Host `mv.example` (OpenSlides 4 ist ein eigener Container-Schwarm) **oder** SaaS nur um den Versammlungstag, gleicher Keycloak-OIDC. Nicht 180 Instanzen.
+Betrieb: extra Host `wahl.example` (OpenSlides 4 ist ein eigener Container-Schwarm) **oder** SaaS nur um den Versammlungstag. Login zuerst lokal (`superadmin` + Teilnehmer-PINs), nicht Keycloak. Nicht 180 Instanzen.
 
 ## Rundschreiben und Mailinglisten
 
@@ -144,7 +144,7 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | `meet.example` | Jitsi |
 | `news.example` | Listmonk (Admin); Zustellung per ESP/SMTP, nicht mailbox.org |
 | `pass.example` | Vaultwarden |
-| `mv.example` | OpenSlides (oder SaaS-URL des Anbieters) |
+| `wahl.example` | OpenSlides (oder SaaS-URL des Anbieters) |
 | — | eigene App: kein extra Host, Client auf `chat.example` |
 
 Portal-Linktree zeigt nur, was der Verein eingeschaltet hat und wozu Token/Gruppe passt.
