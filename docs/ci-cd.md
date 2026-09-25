@@ -13,7 +13,8 @@ Zentrale Dateien (Logo, Farbe, Schrift) einmal festlegen und in jedes Produkt ü
 | Portal / CAV | vollständig | ja, wenn ihr eine baut |
 | Keycloak (Login) | ja, Login-Theme | entfällt (Browser) |
 | Matrix | kein UI | entfällt |
-| Element Web / Desktop | Logo, Name, Farben, Welcome — kein komplettes Private Label | Store-App heißt „Element“, außer eigener Build |
+| Element Web | Logo, Name, Farben, Welcome — kein komplettes Private Label | entfällt (Browser / PWA) |
+| Element X (Store) | Homeserver voreinstellbar, Name bleibt „Element X“ | White-Label nur als **Element Pro** (Kauf) |
 | Zammad | Name, Logo, CSS | entfällt (Browser) |
 | Frappe Learning | Name, Logo, Farben in Settings | entfällt (Browser) |
 | Nextcloud | Theming-App (Name, Logo, Farbe) | offizielle Clients oder GmbH-Branding |
@@ -35,13 +36,13 @@ Das ist der erste Eindruck vor dem Portal. Lohnt sich früh.
 
 **Element** ist der übliche Client dazu, von der Element-Firma (früher Riot):
 
-- Element Web (Browser, das setzt ihr selbst)
-- Element Desktop
-- Element / Element X auf dem Handy (App Stores)
+- Element Web (Browser, das setzt ihr selbst, Kern)
+- Element X (Handy-Stores; Classic-App ist zum 31.12.2026 aus den Stores)
+- optional Element Pro (White-Label auf X, Abo)
 
-Web und Desktop: in `config.json` u. a. `brand` (Anzeigename statt „Element“), Logo auf der Login-Seite, Hintergrund, Farben/`custom_themes`, eigene Welcome-Seite. Die Doku sagt ausdrücklich: **kein vollständiges Private Label**, aber ein klarer Vereinslook ist üblich.
+Web: in `config.json` u. a. `brand` (Anzeigename statt „Element“), Logo auf der Login-Seite, Hintergrund, Farben/`custom_themes`, eigene Welcome-Seite. Die Doku sagt ausdrücklich: **kein vollständiges Private Label**, aber ein klarer Vereinslook ist üblich.
 
-Handy: die Apps aus Play Store / App Store heißen weiter **Element** und zeigen Element-Branding. Ihr könnt den Homeserver voreinstellen, nicht die Store-Identität. Eigene gebrandete Messenger-App = eigener Build (Fork), Apple- und Google-Entwicklerkonto, Pflege bei jedem Upstream-Update — oder ein kostenpflichtiges White-Label von Element. **Optional**, nicht im Kern: zuerst gebrandetes Element Web (als PWA speicherbar), Store-Element nur als Zweitweg. Nicht Element X, kein MAS nur für die App. [optionale-module.md](optionale-module.md).
+Handy: Store-App **Element X**, Homeserver `chat.example`. Login über MAS → Keycloak (derselbe Button wie im Web). Die Store-Identität bleibt „Element“, bis ihr **Element Pro** kauft (Element baut die App, ihr published unter eigenem Store-Konto). Eigenen Classic-Fork nicht mehr einplanen. [optionale-module.md](optionale-module.md).
 
 Andere Matrix-Clients (FluffyChat, Cinny) sind teils leichter zu themen, dann habt ihr aber zwei Welten.
 
@@ -69,4 +70,4 @@ Optionale Overlays (BookStack, Listmonk): Name und Logo in deren Settings, Farbe
 
 Hauptmenü, Mein Konto, CAV-Oberfläche: euer HTML/CSS. Das soll die **Führungs-CI** sein (Farbe, Logo, Schrift). Die anderen Apps nähern sich dem an, ersetzen es nicht pixelgleich.
 
-Praktische Reihenfolge: Logo+Farbpalette definieren → Keycloak-Login → Portal → Element Web → Zammad → Frappe Learning → Nextcloud → optionale Overlays. Store-Apps nicht als erstes versprechen.
+Praktische Reihenfolge: Logo+Farbpalette definieren → Keycloak-Login → Portal → Element Web → Zammad → Frappe Learning → Nextcloud → optionale Overlays. Element-Pro-Store-App nicht als erstes versprechen.

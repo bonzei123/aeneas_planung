@@ -2,7 +2,7 @@
 
 Kein zweiter Kern. Was hier steht, ist **Compose-Overlay**, gleicher Traefik, gleicher Realm `aeneas`. Ein Verein oder der Gesamtverein schaltet es ein; andere laufen ohne. Kein eigenes GitHub-Repo pro Produkt, keine 180 Instanzen.
 
-Kern bleibt: Keycloak, Portal, CAV, Zammad, Frappe Learning, Matrix + Element Web, Nextcloud (nur Backoffice). Optional kommt **nach** dem Testserver-Kern, nicht davor. Die eigene App ist kein Extra-Homeserver: derselbe Chat, nur andere Hülle.
+Kern bleibt: Keycloak, Portal, CAV, Zammad, Frappe Learning, Matrix (Synapse + MAS + Element Web / Element X), Nextcloud (nur Backoffice). Optional kommt **nach** dem Testserver-Kern, nicht davor. Die eigene Store-App ist kein Extra-Homeserver: derselbe Chat, nur andere Hülle.
 
 Filter für jedes Overlay: Docker Compose, Keycloak-OIDC, kein Campus-/k8s-Stack, Solo-Betrieb erklärbar, Rechte aus denselben Gruppen (`verein:*`, `mitgliedschaft:*`, `rolle:*`, `schulung:*`). Kein Keycloak-UMA. Ausnahme eigene App: Client-Build, kein zweites Compose-Produkt.
 
@@ -60,19 +60,18 @@ Nicht: Alfresco, Mayan, OpenKM, SeedDMS.
 
 **Ja, optional**, und kein zweiter Chat-Server.
 
-Mitglieder chatten schon im Kern über **Element Web** auf `chat.example` (Keycloak-SSO, Config `brand` / Logo). Das reicht als gebrandeter Einstieg (Browser, als PWA speicherbar).
+Mitglieder chatten schon im Kern über **Element Web** auf `chat.example` und **Element X** auf dem Handy (MAS → Keycloak, Config `brand` / Logo). Das reicht als gebrandeter Einstieg (Browser, PWA, Store-X).
 
-Darüber hinaus, wenn der Verein eine „eigene App“ will:
+Darüber hinaus, wenn der Verein den **Store-Namen** selbst will:
 
 | Stufe | Was | Extra-Dienst? |
 | --- | --- | --- |
 | Web (Kern) | Element Web, Name und Logo in der Config | nein |
-| PWA / Desktop-Hülle | dieselbe Web-Oberfläche, Icon und Fenstername | nein |
-| Store (Play/App Store) | eigener Build von **Element** (ohne X), Entwicklerkonto, Pflege bei Upstream-Updates | nein, nur Client |
+| PWA | dieselbe Web-Oberfläche, Icon | nein |
+| Handy (Kern) | Store-App **Element X**, Homeserver `chat.example` | nein |
+| Store unter Vereinsnamen | **Element Pro** White-Label (X), Element baut, ihr published | nein, Kauf-Abo |
 
-Nicht: **Element X** und nicht Matrix Authentication Service nur dafür. Element X ist eine andere App mit anderem Login; der jetzige Keycloak-Weg bleibt. Store-Apps von Element heißen weiter „Element“, bis ihr selbst baut oder White-Label kauft. Details: [ci-cd.md](ci-cd.md).
-
-Handy zuerst: Store-App **Element** (ohne X), Homeserver `chat.example`, SSO. Eigene Store-Identität erst, wenn Branding das wirklich braucht.
+Classic-Element aus den Stores nicht mehr einplanen (Sunset 31.12.2026). MAS gehört zum Kern, nicht zum White-Label. Details: [ci-cd.md](ci-cd.md).
 
 ## Mitgliederversammlung / Wahlen
 
@@ -113,7 +112,7 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | E-Mail-Rundschreiben | **Listmonk** + eigener Versandweg | wer nicht in Matrix liest | ja, nur wenn E-Mail sein muss; nicht über mailbox.org |
 | Amts-Passwörter | **Vaultwarden** | `rolle:*` / `backoffice`, MFA | ja; nicht für Mitglieder |
 | Mitgliederversammlung / Wahl | **OpenSlides** | aktiv, oft nur am Versammlungstag | später, aber nötig; extra Host oder SaaS |
-| Eigene Chat-App | Element Web / PWA / Store-Build | aktiv mit `schulung:chat` | ja, optional; siehe oben; nicht Element X |
+| Eigene Chat-App | Element Pro White-Label (X) | aktiv mit `schulung:chat` | ja, optional; Kern ist schon Web + X |
 | Monitoring | Uptime Kuma o. ä. | nur Betrieb | ja, kein Mitglieder-Feature |
 | Mitglieder-Termine | zunächst Portal oder Matrix; sonst Mobilizon | aktiv | erst wenn der Kalender in Nextcloud den Mitgliedern fehlt |
 | Umfragen | Zammad / Portal klein; sonst LimeSurvey | aktiv | nur bei echtem Bedarf |
@@ -134,7 +133,7 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | Akaunting / Invoice Ninja / Dolibarr als Rechnungs-ERP | zweites Geldsystem; Dolibarr = ERPNext-Klasse |
 | Immich, persönlicher Foto-Stack | kein Vereinszweck |
 | ERPNext, CiviCRM | Fachkern ist der CAV |
-| Element X + MAS nur für eine Store-App | anderer Login; gebrandetes Element (ohne X) reicht |
+| Classic-Element als Dauerweg | Store-App ohne X entfällt Ende 2026; MAS + Element X sind Kern |
 
 ## Hosts (nur wenn Overlay an)
 

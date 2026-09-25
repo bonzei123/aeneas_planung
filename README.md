@@ -2,7 +2,7 @@
 
 Planungsrepository für die Serverlandschaft eines **Gesamtvereins** mit mehreren Cannabis-Anbauvereinigungen nach dem KCanG.
 
-Hier liegt die Architektur, nicht der Anwendungscode. Selbst geschrieben werden später nur **Portal** und **CAV-Kern** (FastAPI) plus ein kleiner Matrix-Gruppenabgleich. Der Rest ist fertige Software (Keycloak, Matrix, Zammad, Frappe Learning, Nextcloud) plus **optionale Overlays** (Wiki, Jitsi, eigene App, …).
+Hier liegt die Architektur, nicht der Anwendungscode. Selbst geschrieben werden später nur **Portal** und **CAV-Kern** (FastAPI) plus ein kleiner Matrix-Gruppenabgleich. Der Rest ist fertige Software (Keycloak, Synapse, MAS, Element, Zammad, Frappe Learning, Nextcloud) plus **optionale Overlays** (Wiki, Jitsi, Element Pro, …).
 
 ## Zielbild in einem Satz
 
@@ -21,7 +21,7 @@ flowchart TB
     kc[Keycloak]
     portal[Portal FastAPI]
     cav[CAV-Kern FastAPI]
-    mx[Synapse und Element Web]
+    mx[Synapse, MAS und Element]
     nc[Nextcloud Collabora]
     za[Zammad]
     lms[Frappe Learning]
@@ -69,9 +69,9 @@ flowchart TB
 
 | | Im Kern | Optional, abgegrenzt |
 | --- | --- | --- |
-| Dienste | Keycloak, Portal, CAV, Synapse + Element Web, Zammad, Frappe Learning, Nextcloud nur Amt | BookStack, Jitsi, Listmonk, Vaultwarden; später OpenSlides |
-| Chat-Oberfläche | Element Web auf `chat.…`, SSO wie jetzt, Name/Logo in der Config | Eigene App: Desktop-Hülle, PWA, später Store-Build auf **demselben** Element, nicht Element X |
-| Auth | Synapse-OIDC nach Keycloak | kein MAS nur für eine Store-App |
+| Dienste | Keycloak, Portal, CAV, Synapse + MAS + Element Web, Zammad, Frappe Learning, Nextcloud nur Amt | BookStack, Jitsi, Listmonk, Vaultwarden; später OpenSlides |
+| Chat-Oberfläche | Element Web auf `chat.…` (Name/Logo in der Config); Handy **Element X** | Eigene Store-App: White-Label **Element Pro** (X), Kauf, kein zweiter Homeserver |
+| Auth | MAS nach Keycloak; Synapse ohne eigenes OIDC | — |
 
 Details Overlays: [docs/optionale-module.md](docs/optionale-module.md). Erscheinungsbild: [docs/ci-cd.md](docs/ci-cd.md). Hosts und Compose: [docs/architektur.md](docs/architektur.md).
 

@@ -2,7 +2,7 @@
 
 ## Was SSO von allein kann
 
-Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, Synapse (bzw. MAS), **Zammad** und **Frappe Learning** sind OIDC-Clients desselben Realms. Optionale Overlays (BookStack, Jitsi, Listmonk, Vaultwarden) ebenfalls, nur wenn das Overlay läuft. **OpenSlides** hängt am Host `wahl.`, loggt aber lokal (`superadmin` / Teilnehmer); Gruppe `admin:wahl` nur für die Portal-Kachel.
+Keycloak ist der Identity Provider. Portal, CAV, Nextcloud, **MAS** (Matrix-Login), **Zammad** und **Frappe Learning** sind OIDC-Clients desselben Realms. Synapse spricht nicht selbst mit Keycloak. Optionale Overlays (BookStack, Jitsi, Listmonk, Vaultwarden) ebenfalls, nur wenn das Overlay läuft. **OpenSlides** hängt am Host `wahl.`, loggt aber lokal (`superadmin` / Teilnehmer); Gruppe `admin:wahl` nur für die Portal-Kachel.
 
 Ablauf:
 
@@ -31,7 +31,7 @@ Nextcloud, Zammad, Frappe Learning und optionale Overlays: jeweilige IdP-/Group-
 
 ## Was SSO nicht kann
 
-Synapse kennt OIDC-Login. Synapse kennt **kein** „zeige nur Räume zu meinen Keycloak-Gruppen“.
+MAS kennt OIDC-Login nach Keycloak (Element X und Element Web). Synapse kennt **kein** „zeige nur Räume zu meinen Keycloak-Gruppen“.
 
 Die Kanalliste in Element ist die Menge der Räume, in denen das Matrix-Konto Mitglied ist. Ohne zusätzlichen Abgleich sieht ein neues Mitglied entweder nichts oder zu viel (öffentliches Raumverzeichnis). Das ist ein bekanntes, offenes Thema in Synapse, kein Konfigurationshäkchen.
 
@@ -139,7 +139,7 @@ Mitglied Wanne-Eickel:
 1. Login Keycloak
 2. Portal: Belege, CAV, Support, Schulungen; Chat-Link erst mit `schulung:chat`; optionale Links (Wiki, Meet) nur wenn Overlay an
 3. LMS: Onboarding, Prävention, Chat-Regeln
-4. Element (nach Chat-Kurs): Gesamtverein + NRW + Wanne-Eickel
+4. Element Web oder Element X (nach Chat-Kurs): Gesamtverein + NRW + Wanne-Eickel
 5. Zammad: eigene Tickets
 6. CAV nur Tenant Wanne-Eickel; Abgabe nach Präventionskurs
 7. kein `cloud.example`

@@ -3,7 +3,7 @@
 ## Einstieg
 
 - Ein Linux-Server (Debian oder Ubuntu LTS), Docker Compose
-- Backup nach außen (restic/borg): Postgres-Dumps, MariaDB (LMS), plus Medien von Nextcloud, Frappe Learning, Zammad, Synapse; Overlay-Volumes (BookStack, …) nur wenn das Overlay läuft
+- Backup nach außen (restic/borg): Postgres-Dumps (inkl. MAS), MariaDB (LMS), plus Medien von Nextcloud, Frappe Learning, Zammad, Synapse; Overlay-Volumes (BookStack, …) nur wenn das Overlay läuft
 - Container-Updates bewusst
 
 ## Ein Verein (≤500 Mitglieder)
@@ -78,7 +78,7 @@ Testserver zuerst den **Kern**, ohne CAV-Fachlogik und ohne Overlays. CAV-Repo i
 2. Portal: Login, Linktree, Aufnahmeformular
 3. Zammad + OIDC, Support-Queue (kein Aufnahme-Ticket als Mitglieder-UI)
 4. Frappe Learning + OIDC, Katalog (Onboarding, Prävention, Chat-Regeln)
-5. Matrix + Element, Gruppenabgleich inkl. `schulung:chat` (Abgleich braucht später CAV-Gruppen)
+5. Matrix: Synapse + MAS + Element Web, Handy Element X, Gruppenabgleich inkl. `schulung:chat` (Abgleich braucht später CAV-Gruppen)
 6. Nextcloud + Collabora nur Backoffice (Group Folders = Rechte-Ablage)
 7. CAV: Mandant + Mitglied aus Token, dann Worker LMS-Abschluss → Keycloak `schulung:*`
 8. Mein Konto: Beitrag, Tokens, Schulungsstatus

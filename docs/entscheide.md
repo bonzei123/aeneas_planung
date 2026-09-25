@@ -17,7 +17,7 @@ Betrieb: **Docker Compose**, ggf. mehrere VMs, kein Kubernetes. GitHub: Infra-Co
 ## Schichten
 
 1. **Identität und RBAC:** Keycloak (ein Realm, viele OIDC-Clients). Gruppen im Token sind die Berechtigung; Katalog [sso-matrix.md](sso-matrix.md). Mitgliedschaftsstatus genau einer von `pending` / `aktiv` / `beendet`; Login unabhängig von der Abgabe. Dienst-Türen zusätzlich über `schulung:*` (Abschluss im LMS, geschrieben vom CAV).
-2. **Fertige Apps (Kern):** Matrix/Element (Chat), Zammad (Tickets), Frappe Learning (Schulung), Nextcloud+Collabora (nur Backoffice).
+2. **Fertige Apps (Kern):** Matrix (Synapse + **MAS** + Element Web / Element X), Zammad (Tickets), Frappe Learning (Schulung), Nextcloud+Collabora (nur Backoffice).
 3. **Eigener Fachkern:** FastAPI Portal + CAV-Mandanten, PostgreSQL. Person = `mitglied_id`, nicht Keycloak-`sub` (sonst stirbt der Reimport).
 4. **Optional:** Compose-Overlays hinter demselben Keycloak, [optionale-module.md](optionale-module.md). Nicht im Kern-Compose.
 
@@ -29,7 +29,7 @@ Nur Backoffice (Vorstand, AP, PräVB, Ausgabe, Anbau, Gesamtverein). Mitglieder 
 
 ## Matrix
 
-Mitgliederchat, Spaces je Gesamtverein / Land / Ort. Kein Talk, kein Discord-SaaS. Kanalrechte: [sso-matrix.md](sso-matrix.md). Join erst mit `schulung:chat`, nicht schon bei bloßem `mitgliedschaft:aktiv`.
+Mitgliederchat, Spaces je Gesamtverein / Land / Ort. Kein Talk, kein Discord-SaaS. Login: **MAS** (Matrix Authentication Service) als OIDC-Client zu Keycloak; Synapse delegiert Auth an MAS, kein Synapse-`oidc_providers`. Handy: **Element X** (Classic-Store-App entfällt zum 31.12.2026). Browser: Element Web auf `chat.…`. Kanalrechte: [sso-matrix.md](sso-matrix.md). Join erst mit `schulung:chat`, nicht schon bei bloßem `mitgliedschaft:aktiv`.
 
 ## Mitgliedsbeitrag und Tokens
 
@@ -65,7 +65,7 @@ Nicht jeder Verein braucht dasselbe. Overlay, gleicher Realm, Portal zeigt nur e
 | Newsletter | nur wenn E-Mail-Rundschreiben nötig: **Listmonk + ESP**, nicht mailbox.org. Diskussion = Matrix |
 | Amts-Passwörter | optional **Vaultwarden** |
 | Versammlung / Wahl | später **OpenSlides** (Host `wahl.` oder SaaS). Login zuerst lokal, nicht Keycloak. Satzung muss elektronische MV erlauben. Kein Eigenbau, POLYAS nur auf Anwaltwunsch |
-| Eigene Chat-App | optional; zuerst Element Web branden (schon im Kern). Desktop/PWA/Store-Build auf **Element**, nicht Element X, kein MAS nur dafür. [ci-cd.md](ci-cd.md) |
+| Eigene Chat-App | optional; Kern ist schon MAS + Element Web + Element X. Store unter Vereinsnamen = **Element Pro** (White-Label auf X, Abo), derselbe Homeserver. [ci-cd.md](ci-cd.md) |
 
 [optionale-module.md](optionale-module.md).
 
@@ -79,8 +79,8 @@ Gleiches Gedankenmodell, Kubernetes. Einstieg bleibt Compose.
 
 ## Erscheinungsbild
 
-Alles Web-seitig brandbar (Logo, Name, Farben), mit Abstufungen. Matrix hat kein UI — gebrandet wird **Element**. Handy-Apps aus den Stores bleiben fremd markiert, außer eigenem Build oder Kauf-White-Label. Details: [ci-cd.md](ci-cd.md).
+Alles Web-seitig brandbar (Logo, Name, Farben), mit Abstufungen. Matrix hat kein UI — gebrandet wird **Element Web**. Handy aus dem Store: **Element X** (Name bleibt Element). Vereinsname im Store nur mit Element-Pro-White-Label. Details: [ci-cd.md](ci-cd.md).
 
 ## Code, den niemand erklärt
 
-Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, Zammad, Frappe Learning, Nextcloud, Traefik, Postgres, MariaDB (LMS), Zahlungsdienst. Optional dazu: BookStack, Jitsi, Listmonk, Vaultwarden, OpenSlides, eigene gebrandete Chat-App — nur Images, Compose, SaaS oder Client-Build, kein Fork des Fachkerns.
+Selbst: Portal, CAV-Kern, Matrix-Gruppenabgleich. Konfigurieren: Keycloak, Synapse, MAS, Zammad, Frappe Learning, Nextcloud, Traefik, Postgres, MariaDB (LMS), Zahlungsdienst. Optional dazu: BookStack, Jitsi, Listmonk, Vaultwarden, OpenSlides, Element-Pro-White-Label — nur Images, Compose, SaaS oder Client-Build, kein Fork des Fachkerns.

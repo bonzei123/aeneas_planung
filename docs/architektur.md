@@ -11,7 +11,7 @@ flowchart TB
     kc[Keycloak]
     portal[Portal FastAPI]
     cav[CAV-Kern FastAPI]
-    mx[Synapse und Element Web]
+    mx[Synapse, MAS und Element]
     nc[Nextcloud Collabora]
     za[Zammad]
     lms[Frappe Learning]
@@ -59,7 +59,7 @@ flowchart TB
 
 Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles andere fertige Software hinter demselben Keycloak. LMS-Abschluss → CAV → Gruppe `schulung:*` in Keycloak.
 
-**Gestrichelt / Kasten Optional:** nicht im Kern-Compose, Verein schaltet ein oder lässt weg. [optionale-module.md](optionale-module.md). Eigene App = gebrandetes Element (Web schon im Kern, Desktop/PWA/Store später) auf dem **selben** Login; kein Element X, kein MAS nur dafür. [ci-cd.md](ci-cd.md).
+**Gestrichelt / Kasten Optional:** nicht im Kern-Compose, Verein schaltet ein oder lässt weg. [optionale-module.md](optionale-module.md). Eigene Store-App = **Element Pro** (White-Label auf Element X), gleicher MAS-Login, kein zweiter Homeserver. Kern schon: Element Web + Element X. [ci-cd.md](ci-cd.md).
 
 ## Hosts
 
@@ -68,7 +68,7 @@ Eigener Code nur: **Portal**, **CAV-Kern**, **Matrix-Gruppenabgleich**. Alles an
 | `id.example` | Keycloak | alle Konten |
 | `www.example` | Portal | alle Konten; Aufnahmeformular auch ohne Login |
 | `cav.example` | CAV-Kern | alle, Tenant und Rolle aus Token; Fachzugriff zusätzlich `schulung:*` |
-| `chat.example` | Element / Matrix | `mitgliedschaft:aktiv` **und** `schulung:chat` |
+| `chat.example` | Element Web, MAS, Synapse | `mitgliedschaft:aktiv` **und** `schulung:chat`; Handy Element X |
 | `help.example` | Zammad | alle (Mitglied = Kunde, Amt = Agent nach Gruppe) |
 | `learn.example` | Frappe Learning | `mitgliedschaft:aktiv` |
 | `cloud.example` | Nextcloud + Collabora | nur Backoffice-Gruppen |
@@ -98,7 +98,7 @@ Testserver zuerst **Kern ohne CAV-Fachlogik**: Traefik/Caddy, Keycloak, Portal, 
 | --- | --- | --- |
 | traefik | HTTPS, Hosts | konfigurieren |
 | keycloak + eigene DB | Konten, Gruppen, Clients | konfigurieren |
-| synapse + element | Chat, Spaces, keine Federation | konfigurieren |
+| synapse + mas + element | Chat, Auth (MAS→Keycloak), Spaces, keine Federation | konfigurieren |
 | zammad + elasticsearch/meilisearch laut Doku | Support und Amts-Tickets | konfigurieren |
 | frappe-learning + MariaDB + Redis | Schulungen, Mitwirkungsnachweis (nicht Moodle) | konfigurieren |
 | nextcloud + collabora + redis | Backoffice-Dateien, Kalender, Office | konfigurieren |
@@ -123,4 +123,4 @@ Ausgliedern und Wiederbeitritt: Datenpaket, [mandanten.md](mandanten.md). Kein z
 
 ## Frontends
 
-Portal und CAV: FastAPI plus HTML-Templates. Zammad, Frappe Learning, Element Web, Nextcloud (plus optionales BookStack/Jitsi): deren eigene UI, SSO. Mitglieder sehen Aufnahme und Schulungsstatus im Portal, nicht als Zammad-Ticketmaske. Chat bleibt Element Web mit Keycloak; eine eigene gebrandete App ist optional und ändert den Server nicht.
+Portal und CAV: FastAPI plus HTML-Templates. Zammad, Frappe Learning, Element Web, Nextcloud (plus optionales BookStack/Jitsi): deren eigene UI, SSO. Mitglieder sehen Aufnahme und Schulungsstatus im Portal, nicht als Zammad-Ticketmaske. Chat: Element Web im Browser, Element X auf dem Handy; Login über MAS nach Keycloak. Eine White-Label-Store-App (Element Pro) ist optional und ändert den Server nicht.
