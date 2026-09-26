@@ -6,7 +6,7 @@ Hier liegt die Architektur, nicht der Anwendungscode. Selbst geschrieben werden 
 
 ## Zielbild in einem Satz
 
-Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beitrag) im CAV-Kern. Chat in Matrix, Support in Zammad, Schulung in Frappe Learning (nicht Moodle), Office nur für Ämter in Nextcloud. Dieselbe Landschaft als **ein Verein allein** oder als **Gesamtverein**; Zweige können mit Datenpaket raus und wieder rein. Extra-Module nur als Overlay, nicht im Kern-Compose.
+Ein Keycloak-Konto. Das Portal ist der Linktree. Fachliches (Abgabe, Anbau, Beitrag) im CAV-Kern. Mitgliederkanal in Matrix (Mitteilung, Chat, Wahl-PN), Support in Zammad, Schulung in Frappe Learning (nicht Moodle), Office nur für Ämter in Nextcloud. Dieselbe Landschaft als **ein Verein allein** oder als **Gesamtverein**; Zweige können mit Datenpaket raus und wieder rein. Extra-Module nur als Overlay, nicht im Kern-Compose.
 
 ## Abbild: Kern und Optional
 

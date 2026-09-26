@@ -11,7 +11,7 @@ Ablauf:
 3. Ein Groups-Mapper legt Gruppen in Token bzw. Userinfo.
 4. CAV und Portal lesen die Claims: Tenant aus `verein:*`, Mitgliedschaftsstatus aus `mitgliedschaft:*`, Berechtigung aus `rolle:*` bzw. `cloud`.
 5. Der Nextcloud-Client ist auf Amts-/Dienstgruppen begrenzt. `mitgliedschaft:pending` und `:beendet` bekommen kein Nextcloud-Konto.
-6. Zammad: eingeloggte User (auch pending/beendet) als Kunden; LMS nur `mitgliedschaft:aktiv`. Agenten nach `rolle:*`. Matrix-Join zusätzlich `schulung:chat`.
+6. Zammad: eingeloggte User (auch pending/beendet) als Kunden; LMS nur `mitgliedschaft:aktiv`. Agenten nach `rolle:*`. Matrix-Konto bei `mitgliedschaft:aktiv`; Diskussionsräume zusätzlich `schulung:chat`.
 
 Gleiches Login heißt nicht gleiche Sicht. Nextcloud bleibt vom Mitgliederbereich getrennt.
 
@@ -93,20 +93,22 @@ Gruppen (Präfixe `mitgliedschaft:`, `verein:`, `rolle:`, `schulung:`; keine `am
 | `cloud` | Dienst | Nextcloud, Portal-Kachel Cloud, Gesamtverein |
 | `schulung:onboarding` | Nachweis | Onboarding bestanden |
 | `schulung:praevention` | Nachweis | Prävention / Jahreskurs |
-| `schulung:chat` | Nachweis | Chat-Regeln; Voraussetzung Matrix |
+| `schulung:chat` | Nachweis | Chat-Regeln; Voraussetzung **Diskussionsräume** (nicht der Pflicht-Ankündigungen) |
 | `schulung:ausgabe` | Nachweis | Ausgabeschulung; zusätzlich zu `rolle:ausgabe` |
 
 Vorstand, AP, PräVB sind satzungsgemäße bzw. KCanG-Ämter (oft wenige Personen). Ausgabe ist ebenfalls eine **Rolle**, aber betrieblich: Schichtpersonal, das abgibt — nicht 180 Gruppen, eine globale `rolle:ausgabe`. Wer beides ist (Vorstand, der auch ausgibt), bekommt beide Funktionsgruppen.
 
 ## Matrix-Spaces zum selben Beispiel
 
-Ableitung: Mitglieder-Spaces nur bei `mitgliedschaft:aktiv` **und** `schulung:chat`. `pending` und `beendet` nicht in Vereins-Spaces. Ohne Chat-Schulung kein Element, auch wenn der Status schon aktiv ist.
+Ableitung: **Ankündigungsraum** (nur lesen für Mitglieder) sobald `mitgliedschaft:aktiv` — sonst gibt es keinen Kanal für Newsletter und keine PN zur Wahl. Diskussionsräume (`allgemein`, Hilfe, Vereinschat) erst mit `schulung:chat`. `pending` und `beendet` nicht in Vereins-Spaces.
+
+Das Matrix-Konto legt der Abgleich an, sobald jemand aktiv ist. Sonst kann der Funktionsuser keine PN zustellen.
 
 | Bedingung | Matrix | Nextcloud |
 | --- | --- | --- |
 | `mitgliedschaft:pending` | kein Mitglieder-Space | kein Konto |
-| `mitgliedschaft:aktiv` ohne `schulung:chat` | kein Join | kein Konto |
-| `mitgliedschaft:aktiv` und `schulung:chat` | Space Gesamtverein: Ankündigungen, Hilfe, Regeln | kein Konto |
+| `mitgliedschaft:aktiv` ohne `schulung:chat` | Ankündigungen (lesen); Konto existiert | kein Konto |
+| `mitgliedschaft:aktiv` und `schulung:chat` | plus Diskussion: Hilfe, Regeln, Vereinschat | kein Konto |
 | `mitgliedschaft:beendet` | Kick aus Mitglieder-Spaces | kein Konto |
 | `bundesland:nrw` (aktiv + `schulung:chat`) | Space NRW | kein Konto |
 | `verein:wanne-eickel` (aktiv + `schulung:chat`) | Space Wanne-Eickel: Ort, Termine, Vereinschat | kein Konto |
@@ -128,7 +130,7 @@ Nach Login und zusätzlich periodisch:
 3. Synapse-Admin-API: fehlende Memberships joinen.
 4. Bei Gruppenverlust kicken (Austritt Wanne-Eickel → Space Wanne-Eickel verlassen).
 
-CAV verweigert Abgabe, sobald `mitgliedschaft:aktiv` oder die vom Verein geforderte `schulung:praevention` fehlt. Matrix folgt erst, wenn `schulung:chat` da ist und der Abgleich gelaufen ist. Abgleich direkt nach Login, nach Statuswechsel und nach Schulungsabschluss anstoßen, nicht nur nachts.
+CAV verweigert Abgabe, sobald `mitgliedschaft:aktiv` oder die vom Verein geforderte `schulung:praevention` fehlt. Matrix-Konto und Ankündigungsraum sobald aktiv; Diskussionsräume wenn `schulung:chat` da ist. Abgleich direkt nach Login, nach Statuswechsel und nach Schulungsabschluss anstoßen, nicht nur nachts.
 
 Element Server Suite „Group Sync“ wäre die Kaufvariante. Für den Solo-Betrieb ist ein eigener, lesbarer Worker vorgesehen.
 
@@ -137,9 +139,9 @@ Element Server Suite „Group Sync“ wäre die Kaufvariante. Für den Solo-Betr
 Mitglied Wanne-Eickel:
 
 1. Login Keycloak
-2. Portal: Belege, CAV, Support, Schulungen; Chat-Link erst mit `schulung:chat`; optionale Links (Wiki, Meet) nur wenn Overlay an
+2. Portal: Belege, CAV, Support, Schulungen; Chat-Link (Ankündigungen) mit `mitgliedschaft:aktiv`; Diskussionsräume und Portal-Hinweis auf den Kurs bis `schulung:chat`; optionale Links (Wiki, Meet) nur wenn Overlay an
 3. LMS: Onboarding, Prävention, Chat-Regeln
-4. Element Web oder Element X (nach Chat-Kurs): Gesamtverein + NRW + Wanne-Eickel
+4. Element: Ankündigungen sofort; nach Chat-Kurs Gesamtverein-Diskussion + NRW + Wanne-Eickel
 5. Zammad: eigene Tickets
 6. CAV nur Tenant Wanne-Eickel; Abgabe nach Präventionskurs
 7. kein `cloud.example`

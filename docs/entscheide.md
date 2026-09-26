@@ -29,7 +29,7 @@ Nur Backoffice (Vorstand, AP, PräVB, Ausgabe, Anbau, Gesamtverein). Mitglieder 
 
 ## Matrix
 
-Mitgliederchat, Spaces je Gesamtverein / Land / Ort. Kein Talk, kein Discord-SaaS. Login: **MAS** (Matrix Authentication Service) als OIDC-Client zu Keycloak; Synapse delegiert Auth an MAS, kein Synapse-`oidc_providers`. Handy: **Element X** (Classic-Store-App entfällt zum 31.12.2026). Browser: Element Web auf `chat.…`. Kanalrechte: [sso-matrix.md](sso-matrix.md). Join erst mit `schulung:chat`, nicht schon bei bloßem `mitgliedschaft:aktiv`.
+Mitgliederchat, Spaces je Gesamtverein / Land / Ort. Kein Talk, kein Discord-SaaS. Login: **MAS** (Matrix Authentication Service) als OIDC-Client zu Keycloak; Synapse delegiert Auth an MAS, kein Synapse-`oidc_providers`. Handy: **Element X** (Classic-Store-App entfällt zum 31.12.2026). Browser: Element Web auf `chat.…`. Pflicht-Ankündigungen sobald `mitgliedschaft:aktiv`; Diskussionsräume erst mit `schulung:chat`; Wahl-PIN per PN vom Funktionskonto. Details: [sso-matrix.md](sso-matrix.md).
 
 ## Mitgliedsbeitrag und Tokens
 
@@ -49,7 +49,7 @@ Kein Moodle: Campus-Stack, PHP-FPM, Plugin-Zoo, eigene VM schon bei mäßiger La
 
 ## Mail
 
-Kein eigener Mailserver. Intern: Matrix, Zammad, Nextcloud, Portal. Nach außen und für Passwortreset: Postfächer plus SMTP beim Anbieter. Nichtmitglieder erreichen Ämter über Zammad-Formular oder Funktionsmail, nicht über private Adressen. Aufnahme: gebrandetes Portal-Formular, nicht Zammad-Ticketmaske. [mail.md](mail.md).
+Kein eigener Mailserver. Intern: Matrix (Mitteilung + Chat), Zammad, Nextcloud, Portal. Nach außen und für Passwortreset: Postfächer plus SMTP beim Anbieter. Nichtmitglieder erreichen Ämter über Zammad-Formular oder Funktionsmail, nicht über private Adressen. Aufnahme: gebrandetes Portal-Formular, nicht Zammad-Ticketmaske. [mail.md](mail.md).
 
 ## Optionale Module
 
@@ -62,9 +62,9 @@ Nicht jeder Verein braucht dasselbe. Overlay, gleicher Realm, Portal zeigt nur e
 | DMS | nur **Nextcloud**; Paperless nicht |
 | Eingangsrechnungen | **Zammad + Nextcloud**; buchen DATEV/Lexoffice; kein FOSS-ERP |
 | Video | optional **Jitsi**, kein BBB; MV-Ton/Bild, nicht die Wahl |
-| Newsletter | nur wenn E-Mail-Rundschreiben nötig: **Listmonk + ESP**, nicht mailbox.org. Diskussion = Matrix |
+| Newsletter | **Matrix-Ankündigungsraum** (Element). Kein Listmonk im Kern. PN nur für Geheimnisse (Wahl-PIN), nicht für denselben Text an alle. Listmonk nur, wenn wirklich jemand ohne Element per E-Mail muss |
 | Amts-Passwörter | optional **Vaultwarden** |
-| Versammlung / Wahl | später **OpenSlides** (Host `wahl.` oder SaaS). Login zuerst lokal, nicht Keycloak. Satzung muss elektronische MV erlauben. Kein Eigenbau, POLYAS nur auf Anwaltwunsch |
+| Versammlung / Wahl | **OpenSlides** (Host `wahl.`). Login lokal, nicht Keycloak. Zugänge: PN vom Funktionskonto an jedes stimmberechtigte Matrix-Konto; OpenSlides-SMTP (`wahl@`) nur Fallback. Nicht Zammad. Satzung muss elektronische MV **und** den Chat als Bekanntmachungskanal erlauben |
 | Eigene Chat-App | optional; Kern ist schon MAS + Element Web + Element X. Store unter Vereinsnamen = **Element Pro** (White-Label auf X, Abo), derselbe Homeserver. [ci-cd.md](ci-cd.md) |
 
 [optionale-module.md](optionale-module.md).

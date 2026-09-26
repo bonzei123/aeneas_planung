@@ -10,11 +10,11 @@ Mailbox.org (oder vergleichbar) kostet für einen Verein ein Postfach. Das ist g
 
 Interne Kommunikation läuft über die vorhandenen Kanäle:
 
-- **Matrix** — Mitglieder und Ämter untereinander
+- **Matrix** — Mitglieder untereinander, Vereinsmitteilung (Ankündigungsraum), personenbezogene Geheimnisse per PN vom Funktionskonto
 - **Zammad** — Support, Ämter, Kontakt ohne Login (Formular)
 - **Nextcloud** — nur Backoffice (Kalender, Dateien, Rechte-Ablage)
-- optional **Listmonk** — Rundschreiben, Versand weiter über den Mailanbieter
 - **Portal / CAV** — Belege, Beitrag, Fachliches
+- **Listmonk** — nicht im Kern; nur wenn jemand ohne Element per E-Mail muss
 
 Matrix ersetzt trotzdem nicht jede E-Mail. Es braucht **Postfächer und SMTP bei einem Anbieter** (z. B. mailbox.org oder vergleichbar), die die Apps nur als Versand- und Empfangskanal nutzen.
 
@@ -29,7 +29,7 @@ Ausgang (SMTP), damit Systeme Leute erreichen, die gerade nicht in Element sind:
 
 Eingang (IMAP in Zammad), damit die Öffentlichkeit und Mitglieder ohne Login schreiben können, ohne private Vorstands-Mails zu kennen.
 
-Kein Chat, keine Mitgliederversammlung im Mailprogramm. Sobald jemand Mitglied mit Konto ist: Portal und Zammad im Browser; Matrix erst nach Chat-Schulung.
+Kein Chat, keine Mitgliederversammlung im Mailprogramm. Sobald `mitgliedschaft:aktiv`: Portal, Zammad, **Pflicht-Ankündigungen in Element**. Diskussionsräume erst nach Chat-Schulung (`schulung:chat`).
 
 ## Wer noch kein Mitglied ist
 
@@ -44,7 +44,7 @@ Zwei Eingänge für **Kontakt**, beide landen in derselben Queue — der Aufnahm
 
 Der Vorstand arbeitet Kontakt-Tickets als Agent ab. Die Außenstehende sieht E-Mail oder das Zammad-Kundenportal, nicht Matrix. Private Gmail/Telefonticker der Gewählten bleiben intern.
 
-Nach Zusage: `mitgliedschaft:aktiv`. LMS (Onboarding, Prävention, Chat-Regeln). Matrix erst mit `schulung:chat`.
+Nach Zusage: `mitgliedschaft:aktiv`. LMS (Onboarding, Prävention, Chat-Regeln). Matrix-Konto und Ankündigungsraum sofort; Diskussionsräume mit `schulung:chat`.
 
 Impressum und Satzung brauchen eine Kontaktmöglichkeit — Formular plus eine Funktionsmail reichen, ein eigener Mailserver nicht.
 
@@ -78,7 +78,7 @@ Für den Gesamtverein: **Business** mit Admin-Konsole, nicht 180 Privatkonten. S
 
 Verschiedene Personen brauchen **keine eigenen IMAP-Fächer**. Amt = Keycloak `rolle:*` plus Zammad-Agent in der passenden Gruppe. Neue Mail an `praevention@` wird Ticket in der Präventions-Queue; wer die Rolle hat, sieht sie (Browser/App, optional Zammad-Benachrichtigung an die Login-Mail). Untereinander: **Matrix**. Nach außen antwortet Zammad mit Absender `praevention@…`, nicht mit der Privatadresse.
 
-**Mitgliederbriefe: nicht über mailbox.** Transactional (Passwort, Ticket, SEPA-Hinweis) ja. Ein Newsletter aus Thunderbird/BCC oder Listmonk über dasselbe Fach brennt die Domain-Reputation von `help@` und Keycloak. mailbox ist kein Newsletter-Tool und **keine Mailingliste** (Heinlein-Schwester: [JPBerlin](https://jpberlin.de/mailinglisten-und-newsletterversand)). Optional später **Listmonk** plus ESP, oder nur Matrix-Ankündigungen. Abmelden und Double-Opt-in gehören dazu. Details: [optionale-module.md](optionale-module.md).
+**Mitgliederbriefe: Element, nicht mailbox.** Transactional über SMTP bleibt (Keycloak-Passwort, Zammad nach außen, SEPA-Hinweis, OpenSlides-PIN als Fallback). Rundschreiben und Wahl-PN laufen über Matrix. Ein Newsletter aus Thunderbird/BCC über `help@` brennt die Zustellung. Details: [optionale-module.md](optionale-module.md).
 
 ## Was nicht veröffentlicht wird
 

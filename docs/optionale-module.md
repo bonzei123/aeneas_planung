@@ -88,17 +88,19 @@ Nicht ersetzen durch:
 
 Betrieb: extra Host `wahl.example` (OpenSlides 4 ist ein eigener Container-Schwarm) **oder** SaaS nur um den Versammlungstag. Login zuerst lokal (`superadmin` + Teilnehmer-PINs), nicht Keycloak. Nicht 180 Instanzen.
 
+Stimmberechtigt = Mitglied. Mitglied hat ein Matrix-Konto. **Zugangs-PIN nicht in einen Raum**, sondern PN vom Funktionskonto (`@wahl` / `@info`) an genau diese Person. Satzung: Mitglieder schauen regelmäßig in Element; Bekanntmachung und Einladung dürfen dort erfolgen. OpenSlides-SMTP (`wahl@`) bleibt der Fallback, wenn die PN nicht ankommt — nicht Zammad, nicht BCC über mailbox.
+
+Hunderte PNs klickt niemand in Element. Dafür ein Bot/Funktionsuser über die Synapse-API, nicht der persönliche Account des Vorstands.
+
 ## Rundschreiben und Mailinglisten
 
-Zwei verschiedene Dinge. **Mailingliste** (alle schreiben allen) ist bei euch **Matrix**. Dafür kein Mailman, kein Verteiler in Thunderbird.
+Zwei verschiedene Dinge.
 
-**Newsletter** (Vorstand an viele, HTML, Abmelden, Double-Opt-in) nur, wenn Leute per E-Mail erreicht werden müssen, die nicht in Element lesen. Sonst Ankündigungsraum.
+**Diskussion** (alle schreiben allen): Matrix-Räume, nach Chat-Schulung. Kein Mailman, kein Verteiler in Thunderbird.
 
-**Nicht über mailbox.org.** Das Postfach ist SMTP/IMAP für Keycloak, Zammad, Behörden. Massenversand über dieselbe Domain verbrennt die Zustellung der Passwort-Mails. mailbox hat kein Listenprodukt; der Support verweist auf **JPBerlin** (Heinlein, Berlin). Technisch geht SMTP, ein Vereinsnewsletter gehört trotzdem nicht ins selbe Fach.
+**Newsletter** (Vorstand an viele): **derselbe Stack, anderer Raum.** Ein Ankündigungsraum, den jedes `mitgliedschaft:aktiv` sieht (Mitglieder nur lesen). Derselbe Text nicht als 500 PNs — sonst kein Archiv für Neue, keine Moderation, Push-Spam.
 
-Wenn E-Mail-Rundschreiben sein muss: **Listmonk** (Compose, OIDC, `news.example`) plus **eigener Versandweg** (ESP: JPBerlin, rapidmail, Brevo, SES — nicht das mailbox-Fach von `help@`). Kleine Listen über mailbox-SMTP nur nach Absprache mit dem Anbieter, eigene Absenderdomain idealerweise getrennt. Nicht: BCC an `vorstand@`.
-
-SaaS-Newsletter statt Listmonk ist erlaubt, wenn ihr keinen Extra-Dienst wollen — dann kein Overlay.
+**Nicht über mailbox.org** und nicht über Zammad. Listmonk nur, wenn jemand ohne Element per E-Mail erreicht werden muss (Ehemalige, Behördenverteiler, expliziter Wunsch). Dann eigener Versandweg, nicht `help@`.
 
 ## Weitere optionale Dienste
 
@@ -109,7 +111,7 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | Mitglieder-Handbuch | BookStack | aktiv, nach Schulung laut Verein | ja, siehe oben |
 | Amts-Ablage / Scan | Nextcloud Group Folders | nur Amt | Kern, nicht Overlay; kein Paperless |
 | Video-Sprechstunde | **Jitsi** hinter Traefik, JWT an Keycloak | aktiv + Amt | ja; Bild/Ton der MV, nicht die Wahl. BBB wie Moodle zu schwer |
-| E-Mail-Rundschreiben | **Listmonk** + eigener Versandweg | wer nicht in Matrix liest | ja, nur wenn E-Mail sein muss; nicht über mailbox.org |
+| E-Mail-Rundschreiben | **Listmonk** + ESP | nur wer nachweislich nicht in Element ist | nein im Kern; Ankündigungen = Matrix |
 | Amts-Passwörter | **Vaultwarden** | `rolle:*` / `cloud`, MFA | ja; nicht für Mitglieder |
 | Mitgliederversammlung / Wahl | **OpenSlides** | aktiv, oft nur am Versammlungstag | später, aber nötig; extra Host oder SaaS |
 | Eigene Chat-App | Element Pro White-Label (X) | aktiv mit `schulung:chat` | ja, optional; Kern ist schon Web + X |
