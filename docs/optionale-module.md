@@ -39,7 +39,7 @@ Wiki.js darf intern in ein privates Git spiegeln. Das ersetzt keinen Git-Server 
 
 **Nur Nextcloud.** Kein Paperless daneben.
 
-Nextcloud Group Folders sind die Amts-Ablage: Ordner, Rechte aus Keycloak (`rolle:*`, `verein:*`, `backoffice`), Collabora, Kalender. Zammad bleibt der Auftrag; fertige PDFs und Scans landen in der Cloud. Mitglieder bekommen weiter **kein** Cloud-Konto; ihre Belege liegen im Portal/CAV.
+Nextcloud Group Folders sind die Amts-Ablage: Ordner, Rechte aus Keycloak (`rolle:*`, `verein:*`, `cloud`), Collabora, Kalender. Zammad bleibt der Auftrag; fertige PDFs und Scans landen in der Cloud. Mitglieder bekommen weiter **kein** Cloud-Konto; ihre Belege liegen im Portal/CAV.
 
 **Flow reicht nicht als Rechnungs-BPM.** Die eingebaute Flow-Engine plus App **Approval**: Datei in Ordner → Tag, Benachrichtigung, eine oder verkettete Freigabe (z. B. Ausgabe, dann Vorstand). Keine Beträge, kein Skonto, kein DATEV-Konto, kein Zahlungslauf, kein Eingangsrechnungsbuch. Nextcloud Flow **mit Windmill** (AppAPI) wäre genau der Extra-Stack, den wir bei n8n/Camunda ausgeschlossen haben — nicht einplanen.
 
@@ -110,7 +110,7 @@ Nur was zum Verein passt und den Filter oben übersteht.
 | Amts-Ablage / Scan | Nextcloud Group Folders | nur Amt | Kern, nicht Overlay; kein Paperless |
 | Video-Sprechstunde | **Jitsi** hinter Traefik, JWT an Keycloak | aktiv + Amt | ja; Bild/Ton der MV, nicht die Wahl. BBB wie Moodle zu schwer |
 | E-Mail-Rundschreiben | **Listmonk** + eigener Versandweg | wer nicht in Matrix liest | ja, nur wenn E-Mail sein muss; nicht über mailbox.org |
-| Amts-Passwörter | **Vaultwarden** | `rolle:*` / `backoffice`, MFA | ja; nicht für Mitglieder |
+| Amts-Passwörter | **Vaultwarden** | `rolle:*` / `cloud`, MFA | ja; nicht für Mitglieder |
 | Mitgliederversammlung / Wahl | **OpenSlides** | aktiv, oft nur am Versammlungstag | später, aber nötig; extra Host oder SaaS |
 | Eigene Chat-App | Element Pro White-Label (X) | aktiv mit `schulung:chat` | ja, optional; Kern ist schon Web + X |
 | Monitoring | Uptime Kuma o. ä. | nur Betrieb | ja, kein Mitglieder-Feature |

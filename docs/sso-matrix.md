@@ -9,7 +9,7 @@ Ablauf:
 1. Person meldet sich einmal an Keycloak an (optional MFA).
 2. Die nächste App nutzt die bestehende Sitzung, ohne neues Passwort.
 3. Ein Groups-Mapper legt Gruppen in Token bzw. Userinfo.
-4. CAV und Portal lesen die Claims: Tenant aus `verein:*`, Mitgliedschaftsstatus aus `mitgliedschaft:*`, Berechtigung aus `rolle:*` bzw. `backoffice`.
+4. CAV und Portal lesen die Claims: Tenant aus `verein:*`, Mitgliedschaftsstatus aus `mitgliedschaft:*`, Berechtigung aus `rolle:*` bzw. `cloud`.
 5. Der Nextcloud-Client ist auf Amts-/Dienstgruppen begrenzt. `mitgliedschaft:pending` und `:beendet` bekommen kein Nextcloud-Konto.
 6. Zammad: eingeloggte User (auch pending/beendet) als Kunden; LMS nur `mitgliedschaft:aktiv`. Agenten nach `rolle:*`. Matrix-Join zusätzlich `schulung:chat`.
 
@@ -45,12 +45,12 @@ Vier Achsen, kein Kreuzprodukt:
 | --- | --- | --- | --- |
 | Organisation | 1 Gruppe pro Zweigverein (+ optional Bundesland) | `verein:wanne-eickel`, `bundesland:nrw` | wo die Person zugeordnet ist |
 | Mitgliedschaft | genau eine | `mitgliedschaft:pending`, `mitgliedschaft:aktiv`, `mitgliedschaft:beendet` | ob Login-Fachzugriff Mitglied ist |
-| Funktion | festes Set | `rolle:vorstand`, `rolle:ap`, `rolle:praevb`, `rolle:ausgabe`, `rolle:anbau`, `backoffice` | Amt und Dienst |
+| Funktion | festes Set | `rolle:vorstand`, `rolle:ap`, `rolle:praevb`, `rolle:ausgabe`, `rolle:anbau`, `cloud` | Amt und Dienst |
 | Schulung | 0..n | `schulung:onboarding`, `schulung:praevention`, `schulung:chat`, `schulung:ausgabe` | LMS-Abschluss; CAV schreibt die Gruppe |
 
 Bei 180 Zweigvereinen: 180 `verein:*` plus Status-, Funktions- und Schulungsset, nicht 180×Rollen. Ausgabe in Wanne-Eickel = `verein:wanne-eickel` **und** `rolle:ausgabe`. PräVB analog: `verein:wanne-eickel` **und** `rolle:praevb`.
 
-Keine Gruppen `verein:<slug>:mitglied` / `verein:<slug>:vorstand`. Tenant im CAV kommt aus genau einer `verein:*`-Gruppe. KCanG-Mitgliedschaft in mehr als einem Anbauverein ist rechtlich eingeschränkt; der Fachkern prüft das, nicht Keycloak. Backoffice sieht Mandanten in der CAV-UI über `backoffice`, nicht über 180 Vereinsgruppen.
+Keine Gruppen `verein:<slug>:mitglied` / `verein:<slug>:vorstand`. Tenant im CAV kommt aus genau einer `verein:*`-Gruppe. KCanG-Mitgliedschaft in mehr als einem Anbauverein ist rechtlich eingeschränkt; der Fachkern prüft das, nicht Keycloak. Gesamtverein sieht Mandanten in der CAV-UI über `cloud`, nicht über 180 Vereinsgruppen.
 
 CAV speichert Personen als `mitglied_id`. Keycloak-`sub` nur Spiegel — beim Ausgliedern gibt es ein neues Realm, der `sub` wechselt, die E-Mail bleibt der Join-Schlüssel. [mandanten.md](mandanten.md).
 
@@ -90,7 +90,7 @@ Gruppen (Präfixe `mitgliedschaft:`, `verein:`, `rolle:`, `schulung:`; keine `am
 | `rolle:praevb` | Amt | Präventionsbeauftragte |
 | `rolle:ausgabe` | Dienst | Ausgabe; CAV-Abgabe, mehrere Personen pro Verein |
 | `rolle:anbau` | Dienst | Anbauteam |
-| `backoffice` | Dienst | Gesamtverein-Mitarbeiter |
+| `cloud` | Dienst | Nextcloud, Portal-Kachel Cloud, Gesamtverein |
 | `schulung:onboarding` | Nachweis | Onboarding bestanden |
 | `schulung:praevention` | Nachweis | Prävention / Jahreskurs |
 | `schulung:chat` | Nachweis | Chat-Regeln; Voraussetzung Matrix |
